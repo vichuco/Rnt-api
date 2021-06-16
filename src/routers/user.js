@@ -167,8 +167,8 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                         "categories": [
                             {
                                 "name": "videos",
-                                "mp4": "https://andres-rnt-api.herokuapp.com/",
-                                "images": "https://andres-rnt-api.herokuapp.com/",
+                                "mp4": "/",
+                                "images": "/",
                                 "videos": []
                             }
                         ]
@@ -414,7 +414,7 @@ function JSONtoGrill(json, filename, res) {
                 "fin": element.Fin,
                 "descripcion": element.Descripcion,
                 "poster": element.Poster,
-                "video": "https://andres-rnt-api.herokuapp.com/programas/bibliaFacil.mp4",
+                "video": "/bibliaFacil.mp4",
             }
             grill.categories[0].files.push(mp4Json);
             const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
