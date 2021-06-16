@@ -1,0 +1,78 @@
+body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #f5f5f5;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    margin: 0 auto;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    color: #00B7FF;
+  }
+  
+  .center {
+    text-align: center;
+  }
+  
+  .headerImage {
+    align-self: center;
+    height: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 180px;
+  }
+  
+  .headerImage {
+    padding-bottom: 50px;
+  }
+  
+  .buttonHeader {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .adminButton {
+    text-align: center;
+    padding: 5px;
+    font-weight: bold;
+  }
+  
+  .logoutButton {
+    text-align: center;
+    padding: 5px;
+    font-weight: bold;
+  }
+  
+  .uploadContainer {
+    display: block;
+    align-self: center;
+    width: 75%;
+    border: 1px solid rgba(0, 0, 0, 0.13);
+  }
+  .uploadContainer input {
+    padding: 10px;
+  }
+  .uploadContainer h2 {
+    padding: 10px;
+  }
+  .uploadContainer button {
+    margin: 10px;
+  }
+  
+  .loginForm {
+    align-self: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .inputText {
+    margin: 3px;
+  }
+  
+  .inputButton {
+    margin: 5px;
+  }

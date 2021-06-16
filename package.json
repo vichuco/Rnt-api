@@ -1,0 +1,41 @@
+{
+  "name": "rnt_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "env-cmd ./config/dev.env nodemon src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.7",
+    "ejs-lint": "^1.1.0",
+    "express": "^4.17.1",
+    "express-session": "^1.16.1",
+    "fetch": "^1.1.0",
+    "gridfs-stream": "^1.1.1",
+    "iconv-lite": "^0.6.2",
+    "json-easy-filter": "^0.3.1",
+    "jsonfile": "^6.1.0",
+    "jsonwebtoken": "^8.4.0",
+    "method-override": "^2.3.10",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.8",
+    "multer": "^1.4.1",
+    "multer-gridfs-storage": "^3.0.0",
+    "node-fetch": "^2.6.1",
+    "pug": "^3.0.0",
+    "rimraf": "^3.0.2",
+    "validator": "^13.1.17",
+    "xlsx-to-json": "^0.3.0"
+  },
+  "devDependencies": {
+    "env-cmd": "^8.0.2",
+    "nodemon": "^2.0.4"
+  }
+}

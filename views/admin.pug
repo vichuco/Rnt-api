@@ -1,0 +1,37 @@
+extends layoutAdmin
+
+block content
+    .buttonHeader
+        form(action='/app')
+            input.adminButton(type='submit' value='API')
+        form.logoutForm(method='POST', action='/logout')
+            input.logoutButton(type='submit' value="Cerrar sesión")
+    h1 Subir un archivo con extensión .xlsx para la parrilla
+    p El nombre del archivo debe seguir el formato semana_actual.xlsx ó semana_siguiente.xlsx
+
+    .uploadContainer
+        h2 Seleccione un archivo
+        form#uploadFile(action='/addgrill', method='post', enctype='multipart/form-data')
+            input(type='file', name='file' required)
+            input(type='submit')
+
+        br
+        a(href="semana_actual.xlsx") PLANTILLA de excel semana actual
+        br
+        br
+        a(href='semana_siguiente.xlsx') PLANTILLA de excel semana siguiente
+        br
+        br
+        br
+        br
+        if xlsActual
+            a(href="xls/semana_actual.xlsx") Parrilla en excel semana actual
+        else
+            p No hay fichero para la semana actual
+        br
+        br
+        if xlsSiguiente
+            a(href='xls/semana_siguiente.xlsx') Parrilla en excel semana siguiente
+        else
+            p No hay fichero para la semana siguiente
+    br

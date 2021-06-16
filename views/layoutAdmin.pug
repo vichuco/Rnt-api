@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    title= title
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+    script(src='/scripts/adminForm.js')
+    link(rel='stylesheet', href='/css/stylesAdmin.css')
+    link(rel='icon' type='image/png' href='/img/logo.png')
+  body
+    block header
+      img.headerImage(src="img/cabecera.png" alt="Radio Nuevo Tiempo")
+    block content
