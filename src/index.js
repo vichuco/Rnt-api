@@ -32,7 +32,7 @@ app.use(function (req, res, next) {
 });
 
 app.use('/app', indexRouter)
-const port = process.env.PORT
+const port = process.env.PORT || 3000
 app.use(methodOverride('_method'))
 app.use(express.json())
 app.use(cookieParser());
