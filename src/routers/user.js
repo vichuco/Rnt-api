@@ -129,7 +129,8 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
     // Comprobamos si hay parrilla de semana actual y semana siguiente guardadas en el servidor para luego mostrarlo en el front
     if (fs.existsSync(path + "semana_actual.xlsx")) xlsActual = true
     if (fs.existsSync(path + "semana_siguiente.xlsx")) xlsSiguiente = true
-    Grid.files.find().toArray((err, files) => {
+    var gfs = Grid(conn.db);
+    gfs.files.find().toArray((err, files) => {
         // Check if files
         if (!files || files.length === 0) {
             //return res.status(404).json({
