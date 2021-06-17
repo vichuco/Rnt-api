@@ -99,7 +99,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
 
-        gfs.files.find().toArray((err, files) => {
+        Grid.files.find().toArray((err, files) => {
             // Check if files
             if (!files || files.length === 0) {
                 res.render('audio.ejs', { files: false });
@@ -129,7 +129,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
     // Comprobamos si hay parrilla de semana actual y semana siguiente guardadas en el servidor para luego mostrarlo en el front
     if (fs.existsSync(path + "semana_actual.xlsx")) xlsActual = true
     if (fs.existsSync(path + "semana_siguiente.xlsx")) xlsSiguiente = true
-    gfs.files.find().toArray((err, files) => {
+    Grid.files.find().toArray((err, files) => {
         // Check if files
         if (!files || files.length === 0) {
             //return res.status(404).json({
@@ -257,7 +257,7 @@ router.post('/logout', auth, async (req, res) => {
 })
 
 router.get('/sound/:filename', (req, res) => {
-    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+    Grid.files.findOne({ filename: req.params.filename }, (err, file) => {
         // Check if file
         if (!file || file.length === 0) {
             return res.status(404).json({
@@ -280,7 +280,7 @@ router.get('/sound/:filename', (req, res) => {
 })
 
 router.get('/json/:filename', (req, res) => {
-    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+    Grid.files.findOne({ filename: req.params.filename }, (err, file) => {
         // Check if file
         if (!file || file.length === 0) {
             return res.status(404).json({
@@ -304,7 +304,7 @@ router.get('/json/:filename', (req, res) => {
 
 // obtener todos los files en formato json
 router.get('/files', (req, res) => {
-    gfs.files.find().toArray((err, files) => {
+    Grid.files.find().toArray((err, files) => {
         // Check if files
         if (!files || files.length === 0) {
             return res.status(404).json({
@@ -321,11 +321,11 @@ router.get('/files', (req, res) => {
 })
 
 router.delete('/files/:id', (req, res) => {
-    gfs.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
+    Grid.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
         if (err) {
             return res.status(404).json({ err: err });
         }
-        gfs.files.find().toArray((err, files) => {
+        Grid.files.find().toArray((err, files) => {
             // Check if files audio/mpeg
             if (!files || files.length === 0) {
                 res.render('audio.ejs', { files: false });
