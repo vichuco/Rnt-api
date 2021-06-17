@@ -21,10 +21,44 @@ const port = process.env.PORT || 3000
 
 const conn = mongoose.createConnection(process.env.MONGODB_URL);
 
-let gfst=conn.once('open', () => {
+conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('uploads');
+    router.post('/login', urlencodedParser, async (req, res) => {
+    try {
+        const user = await User.findByCredentials(req.body.email, req.body.password)
+        req.session.userInfo = user
+        const token = await user.generateAuthToken()
+        res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
+        //res.send({ user, token })
+        /*res.send({valid: true})-- aqui comentar*/
+        //res.render('admin', { title: 'Radio Nuevo Tiempo'})
+        //res.send({ user, token })
+        // res.setHeader('Authorization', 'Bearer '+ token)
+        //req.session.userInfo = ({ token  })
+        
+        gfst.find().toArray((err, files) => {
+            // Check if files
+            if (!files || files.length === 0) {
+                res.render('audio.ejs', { files: false });
+            } else {
+                files.map(file => {
+                    if (
+                        file.contentType === 'video/mp4'
+                    ) {
+                        file.isImage = true;
+                    } else {
+                        file.isImage = false;
+                    }
+                });
+                res.render('audio.ejs', { files: files });
+            }
+        })
+    } catch (e) {
+        res.status(400).send("usuario o contrasena incorrectas")
+    }
+})
 })
 
 // Multer para la base de datos
@@ -87,14 +121,14 @@ router.post('/users', urlencodedParser, async (req, res) => {
     }
 })
 
-router.post('/login', urlencodedParser, async (req, res) => {
+/*router.post('/login', urlencodedParser, async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
         req.session.userInfo = user
         const token = await user.generateAuthToken()
         res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
         //res.send({ user, token })
-        /*res.send({valid: true})*/
+        /*res.send({valid: true})-- aqui comentar
         //res.render('admin', { title: 'Radio Nuevo Tiempo'})
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
@@ -120,7 +154,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
     } catch (e) {
         res.status(400).send("usuario o contrasena incorrectas")
     }
-})
+})*/
 
 
 router.post('/upload', auth, upload.single('file'), (req, res) => {
