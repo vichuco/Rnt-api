@@ -99,7 +99,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
 
-        Grid.files.find().toArray((err, files) => {
+        conn.find().toArray((err, files) => {
             // Check if files
             if (!files || files.length === 0) {
                 res.render('audio.ejs', { files: false });
@@ -130,7 +130,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
     if (fs.existsSync(path + "semana_actual.xlsx")) xlsActual = true
     if (fs.existsSync(path + "semana_siguiente.xlsx")) xlsSiguiente = true
 
-    conn.files.find().toArray((err, files) => {
+    conn.find().toArray((err, files) => {
         // Check if files
         if (!files || files.length === 0) {
             //return res.status(404).json({
