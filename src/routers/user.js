@@ -20,6 +20,7 @@ const port = process.env.PORT || 3000
 
 
 const conn = mongoose.createConnection(process.env.MONGODB_URL);
+var gfs = Grid(conn,mongoose)
 conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db, mongoose.mongo);
@@ -99,7 +100,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
 
-        conn.find().toArray((err, files) => {
+        gfs.find().toArray((err, files) => {
             // Check if files
             if (!files || files.length === 0) {
                 res.render('audio.ejs', { files: false });
@@ -130,7 +131,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
     if (fs.existsSync(path + "semana_actual.xlsx")) xlsActual = true
     if (fs.existsSync(path + "semana_siguiente.xlsx")) xlsSiguiente = true
 
-    conn.find().toArray((err, files) => {
+    gfs.find().toArray((err, files) => {
         // Check if files
         if (!files || files.length === 0) {
             //return res.status(404).json({
