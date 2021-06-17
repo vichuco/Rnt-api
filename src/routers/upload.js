@@ -4,7 +4,7 @@ const router = express.Router()
 
 
 router.get('/', function (req, res, next) {
-    gfs.files.find().toArray((err, files) => {
+    /*gfs.files.find().toArray((err, files) => {
         // Check if files
         if (!files || files.length === 0) {
             res.render('audio.ejs', { files: false });
@@ -20,7 +20,8 @@ router.get('/', function (req, res, next) {
             });
             res.render('audio.ejs', { files: files });
         }
-    })
+    })*/
+    res.render('audio.ejs', { files: false });
 })
 
 module.exports = router
