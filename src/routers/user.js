@@ -20,13 +20,13 @@ const port = process.env.PORT || 3000
 
 
 const conn = mongoose.createConnection(process.env.MONGODB_URL);
-
+let gfs
 conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('uploads');
 })
-var gfs = Grid(conn.db, mongoose.mongo)
+
 // Multer para la base de datos
 const storage = new GridFsStorage({
     url: process.env.MONGODB_URL,
