@@ -20,7 +20,7 @@ const port = process.env.PORT || 3000
 
 
 const conn = mongoose.createConnection(process.env.MONGODB_URL);
-
+let gfs;
 conn.once('open', () => {
     // Init stream
     var gfs = Grid(conn.db, mongoose.mongo);
@@ -99,7 +99,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
-
+        
         gfs.find().toArray((err, files) => {
             // Check if files
             if (!files || files.length === 0) {
