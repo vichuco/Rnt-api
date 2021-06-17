@@ -129,12 +129,8 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
     // Comprobamos si hay parrilla de semana actual y semana siguiente guardadas en el servidor para luego mostrarlo en el front
     if (fs.existsSync(path + "semana_actual.xlsx")) xlsActual = true
     if (fs.existsSync(path + "semana_siguiente.xlsx")) xlsSiguiente = true
-    const conn = mongoose.createConnection(process.env.MONGODB_URL);
-    conn.once('open', () => {
-    // Init stream
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('uploads');
-    gfs.files.find().toArray((err, files) => {
+
+    conn.files.find().toArray((err, files) => {
         // Check if files
         if (!files || files.length === 0) {
             //return res.status(404).json({
@@ -168,62 +164,62 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
 
 
             });
-                    const grill = {
-                        "categories": [
-                            {
-                                "name": "videos",
-                                "mp4": "https://andres-rnt-api.herokuapp.com/",
-                                "images": "https://andres-rnt-api.herokuapp.com/",
-                                "videos": []
-                            }
-                        ]
+            const grill = {
+                "categories": [
+                    {
+                        "name": "videos",
+                        "mp4": "https://andres-rnt-api.herokuapp.com/",
+                        "images": "https://andres-rnt-api.herokuapp.com/",
+                        "videos": []
                     }
-                        files.forEach (file => {
-                            let saved = true;
-                        
-                        if (file._id !== '') {
-                            let mediaType = "videos/mp4"
-                            const mp4Json = {
-                                "subtitle": "Fusce id nisi turpis. Praesent viverra bibendum semper. Donec tristique, orci sed semper lacinia, quam erat rhoncus massa, non congue tellus est quis tellus",
-                                "sources": [
-                                    {
-                                        "type": "mp4",
-                                        "mime": mediaType,
-                                        "url": "sound/" + file.filename
-                                    }
-                                ],
-                                //"image": "/p/106/thumbnail/entry_id/" + element.ID + "/width/480/height/200",
-                                "thumb": "thumbnails/headphones-480x270.png",
-                                "image-480x270": "thumbnails/headphones-480x270.png",
-                                "image-780x1200": "thumbnails/headphones-780x1200.png",
-                                "title": file.filename,
-                                "studio": "RNT",
-                                "duration": parseInt(file.length) || 0,
-                            }
-                            grill.categories[0].videos.push(mp4Json);
+                ]
+            }
+            files.forEach(file => {
+                let saved = true;
 
-                            const path = 'public/podcast/podcast.json'
-                            try {
-                                // Si aun no existe el directorio /jsons debe crearse antes de guardar el archivo de la parrilla
-                                if (!fs.existsSync('public/podcast/')) {
-                                    fs.mkdirSync('public/podcast/');
-                                    const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
-                                    fs.writeFileSync(path, str);
-                                } else {
-                                    const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
-                                    fs.writeFileSync(path, str);
-                                }
-                            } catch (e) {
-                                console.log(e);
-                                // Si se produce algún error se notifica al front para que muestre una alerta
-                                saved = false;
-                                //res.send({saved: false, error: e});
+                if (file._id !== '') {
+                    let mediaType = "videos/mp4"
+                    const mp4Json = {
+                        "subtitle": "Fusce id nisi turpis. Praesent viverra bibendum semper. Donec tristique, orci sed semper lacinia, quam erat rhoncus massa, non congue tellus est quis tellus",
+                        "sources": [
+                            {
+                                "type": "mp4",
+                                "mime": mediaType,
+                                "url": "sound/" + file.filename
                             }
+                        ],
+                        //"image": "/p/106/thumbnail/entry_id/" + element.ID + "/width/480/height/200",
+                        "thumb": "thumbnails/headphones-480x270.png",
+                        "image-480x270": "thumbnails/headphones-480x270.png",
+                        "image-780x1200": "thumbnails/headphones-780x1200.png",
+                        "title": file.filename,
+                        "studio": "RNT",
+                        "duration": parseInt(file.length) || 0,
+                    }
+                    grill.categories[0].videos.push(mp4Json);
 
+                    const path = 'public/podcast/podcast.json'
+                    try {
+                        // Si aun no existe el directorio /jsons debe crearse antes de guardar el archivo de la parrilla
+                        if (!fs.existsSync('public/podcast/')) {
+                            fs.mkdirSync('public/podcast/');
+                            const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
+                            fs.writeFileSync(path, str);
+                        } else {
+                            const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
+                            fs.writeFileSync(path, str);
                         }
+                    } catch (e) {
+                        console.log(e);
+                        // Si se produce algún error se notifica al front para que muestre una alerta
+                        saved = false;
+                        //res.send({saved: false, error: e});
+                    }
 
-                        })
-                    
+                }
+
+            })
+
 
             res.render('audio.ejs', { files: files });
             //fs.rmdirSync("public/audios/", {recursive:true})
@@ -235,7 +231,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
 
         //res.render('admin.pug', { title: 'Radio Nuevo Tiempo', xlsActual: xlsActual, xlsSiguiente: xlsSiguiente })
     })
-})
+
     /*gfs.files.find().toArray((err, files) => {
         // Check if files
         if (!files || files.length === 0) {
