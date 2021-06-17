@@ -20,8 +20,8 @@ const port = process.env.PORT || 3000
 
 
 const conn = mongoose.createConnection(process.env.MONGODB_URL);
-let gfs;
-conn.once('open', () => {
+
+let gfs=conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('uploads');
