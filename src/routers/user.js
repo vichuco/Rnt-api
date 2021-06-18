@@ -17,7 +17,7 @@ const mongoose = require('mongoose')
 const rimraf = require("rimraf")
 const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
-Grid.mongo = mongoose.mongo;
+Grid.mongo = mongoose.mongo
 const port = process.env.PORT || 3000
 
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
