@@ -21,13 +21,13 @@ Grid.mongo = mongoose.mongo
 const port = process.env.PORT || 3000
 
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
-const conn = mongoose.createConnection(process.env.MONGODB_URL);
+/*const conn = mongoose.createConnection(process.env.MONGODB_URL);
 conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db);
     gfs.collection('uploads');
     
-})
+})*/
 
 
 
