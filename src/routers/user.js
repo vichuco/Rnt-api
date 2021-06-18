@@ -1,7 +1,6 @@
 const express = require('express')
 const router = new express.Router()
 const User = require('../models/user')
-const gfs = require('../db/gridfs')
 const bodyParser = require('body-parser')
 const multer = require('multer')
 const xlsxj = require("xlsx-to-json");
