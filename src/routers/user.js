@@ -20,7 +20,7 @@ const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const port = process.env.PORT || 3000
 
-/*var gfs =null
+var gfs =null
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
 const conn = mongoose.createConnection(process.env.MONGODB_URL);
 conn.once('open', () => {
@@ -28,7 +28,7 @@ conn.once('open', () => {
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('uploads');
     
-})*/
+})
 
 
 
