@@ -104,7 +104,8 @@ router.post('/login', urlencodedParser, async (req, res) => {
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
         
-        const gfs = Grid(conn.db);
+        const gfs = Grid(conn.db)
+        gfs.collection('uploads')
 
         gfs.find().toArray((err, files) => {
             // Check if files
