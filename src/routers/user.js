@@ -12,7 +12,7 @@ const GridFsStorage = require('multer-gridfs-storage')
 const Grid = require('gridfs-stream')
 const path = require('path')
 const iconvlite = require('iconv-lite')
-const gfs = require('./db/mongoose')
+//const mongoose = require('./db/mongoose')
 const mongoose = require('mongoose')
 const rimraf = require("rimraf")
 const fetch = require("node-fetch")
@@ -20,9 +20,10 @@ const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const port = process.env.PORT || 3000
 
 
-/*const conn = mongoose.createConnection(process.env.MONGODB_URL);
-let gfs
-conn.once('open', () => {
+//const conn = mongoose.createConnection(process.env.MONGODB_URL);
+const conn = mongoose.createConnection('uploads',process.env.MONGODB_URL);
+var gfs = Grid(conn.db,mongoose.mongo)
+/*conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('uploads');
@@ -102,7 +103,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
-        const conn = mongoose.createConnection(process.env.MONGODB_URL);
+        
 
 
         gfs.find().toArray((err, files) => {
