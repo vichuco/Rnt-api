@@ -17,14 +17,14 @@ const mongoose = require('mongoose')
 const rimraf = require("rimraf")
 const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
+Grid.mongo = mongoose.mongo;
 const port = process.env.PORT || 3000
 
-var gfs =null
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
 const conn = mongoose.createConnection(process.env.MONGODB_URL);
 conn.once('open', () => {
     // Init stream
-    gfs = Grid(conn.db, mongoose.mongo);
+    gfs = Grid(conn.db);
     gfs.collection('uploads');
     
 })
@@ -104,7 +104,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
         
-
+        const gfs = Grid(conn.db);
 
         gfs.find().toArray((err, files) => {
             // Check if files
