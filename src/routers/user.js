@@ -19,13 +19,14 @@ const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const port = process.env.PORT || 3000
 
-
+var self = this;
+	self.gfs = null;
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
 const conn = mongoose.createConnection(process.env.MONGODB_URL);
 conn.once('open', () => {
     // Init stream
-    GridFileSystem.gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('uploads');
+    self.gfs = Grid(conn.db, mongoose.mongo);
+    self.gfs.collection('uploads');
     
 })
 
@@ -105,7 +106,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         
 
 
-        gfs.find().toArray((err, files) => {
+        self.gfs.find().toArray((err, files) => {
             // Check if files
             if (!files || files.length === 0) {
                 res.render('audio.ejs', { files: false });
