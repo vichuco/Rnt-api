@@ -19,14 +19,15 @@ const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const port = process.env.PORT || 3000
 
 
-const conn = mongoose.createConnection(process.env.MONGODB_URL);
+/*const conn = mongoose.createConnection(process.env.MONGODB_URL);
 let gfs
 conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('uploads');
     
-})
+})*/
+
 
 // Multer para la base de datos
 const storage = new GridFsStorage({
@@ -100,8 +101,33 @@ router.post('/login', urlencodedParser, async (req, res) => {
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
-        
-        gfs.find().toArray((err, files) => {
+        const conn = mongoose.createConnection(process.env.MONGODB_URL);
+
+        conn.once('open', () => {
+            // Init stream
+            gfs = Grid(conn.db, mongoose.mongo);
+            gfs.collection('uploads');
+            gfs.find().toArray((err, files) => {
+                // Check if files
+                if (!files || files.length === 0) {
+                    res.render('audio.ejs', { files: false });
+                } else {
+                    files.map(file => {
+                        if (
+                            file.contentType === 'video/mp4'
+                        ) {
+                            file.isImage = true;
+                        } else {
+                            file.isImage = false;
+                        }
+                    });
+                    res.render('audio.ejs', { files: files });
+                }
+            })
+
+        })
+
+        /*gfs.find().toArray((err, files) => {
             // Check if files
             if (!files || files.length === 0) {
                 res.render('audio.ejs', { files: false });
@@ -117,7 +143,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
                 });
                 res.render('audio.ejs', { files: files });
             }
-        })
+        })*/
     } catch (e) {
         res.status(400).send("usuario o contrasena incorrectas")
     }
