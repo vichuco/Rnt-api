@@ -7,10 +7,10 @@ mongoose.connect(process.env.MONGODB_URL, {
 
 })
 
-const conn = mongoose.connection
+/*const conn = mongoose.connection
 const gfs = null
 conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db);
     gfs.collection('uploads');
-})
+})*/
