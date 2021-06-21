@@ -28,6 +28,12 @@ conn.once('open', () => {
     gfs.collection('uploads');
     
 })*/
+var gfs = mongoose.connection
+gfs.once('open', () => {
+    // Init stream
+    gfs = Grid(conn.db);
+    gfs.collection('uploads');
+})
 
 
 
@@ -104,8 +110,6 @@ router.post('/login', urlencodedParser, async (req, res) => {
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
         
-        const gfs = Grid(conn.db)
-        gfs.collection('uploads')
 
         gfs.find().toArray((err, files) => {
             // Check if files
