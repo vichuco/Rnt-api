@@ -17,7 +17,6 @@ const mongoose = require('mongoose')
 const rimraf = require("rimraf")
 const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
-Grid.mongo = mongoose.mongo
 const port = process.env.PORT || 3000
 
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
@@ -28,7 +27,7 @@ conn.once('open', () => {
     gfs.collection('uploads');
     
 })*/
-var gfs = mongoose.connection
+const gfs = mongoose.connection
 gfs.once('open', () => {
     // Init stream
     gfs = Grid(conn.db);
