@@ -7,11 +7,13 @@ const Grid = require('gridfs-stream')
     useFindAndModify: false
 
 })*/
+const gfs = null
 const conn = mongoose.createConnection(process.env.MONGODB_URL)
 conn.once('open', () => {
     // Init stream
-    const gfs = Grid(conn.db);
+     gfs = Grid(conn.db);
     gfs.collection('uploads');
     
 })
 
+module.exports = gfs
