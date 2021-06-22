@@ -18,7 +18,7 @@ app.use(session({ resave: false, saveUninitialized: false, secret: '123456789' }
 const methodOverride = require('method-override')
 
 app.use(function (req, res, next) {
-    if(!req.session.userInfo && (req.path === '/upload'  || req.path === '/login'   ) && req.method === 'GET') {
+    if(!req.session.userInfo && (/*req.path === '/upload'  ||*/ req.path === '/login'   ) && req.method === 'GET') {
         res.redirect('/');
     } 
     else if(req.path === '/logout' && req.method === 'POST'){
