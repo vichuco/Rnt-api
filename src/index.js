@@ -14,7 +14,13 @@ const app = express()
 app.use(session({ resave: false, saveUninitialized: false, secret: '123456789' }))
 //const http = require('http')
 //const nconf = require('nconf')
-
+const conn = mongoose.createConnection(process.env.MONGODB_URL);
+conn.once('open', () => {
+    // Init stream
+    gfs = Grid(conn.db);
+    gfs.collection('uploads');
+    
+})
 const methodOverride = require('method-override')
 
 app.use(function (req, res, next) {

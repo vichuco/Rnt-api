@@ -14,8 +14,7 @@ conn.once('open', () => {
 mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: false,
-    useMongoClient: true
+    useFindAndModify: false
 
 })
 
