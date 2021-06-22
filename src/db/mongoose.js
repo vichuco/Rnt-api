@@ -7,12 +7,7 @@ const Grid = require('gridfs-stream')
     useFindAndModify: false
 
 })*/
-const conn = mongoose.createConnection(process.env.MONGODB_URL, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false
-
-})
+const conn = mongoose.createConnection(process.env.MONGODB_URL)
 conn.once('open', () => {
     // Init stream
     const gfs = Grid(conn.db);
