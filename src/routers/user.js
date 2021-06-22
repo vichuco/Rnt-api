@@ -57,6 +57,7 @@ const storage = new GridFsStorage({
         });
     }
 });
+const upload = multer({ storage });
 const conn = mongoose.createConnection(process.env.MONGODB_URL);
 conn.once('open', () => {
     // Init stream
@@ -64,7 +65,7 @@ conn.once('open', () => {
     gfs.collection('uploads');
     
 })
-const upload = multer({ storage });
+
 
 //Multer para los audios
 
