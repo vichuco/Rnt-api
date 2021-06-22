@@ -16,4 +16,3 @@ conn.once('open', () => {
     
 })
 
-module.exports = gfs
