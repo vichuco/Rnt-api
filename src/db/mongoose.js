@@ -9,12 +9,10 @@ Grid.mongo = mongoose.mongo;
 
 })*/
 const gfs = null
-const conn = mongoose.createConnection(process.env.MONGODB_URL)
+const conn = mongoose.createConnection(process.env.MONGODB_URL,{useNewUrlParser: true})
 conn.once('open', () => {
     // Init stream
      gfs = Grid(conn.db);
     gfs.collection('uploads');
     
 })
-
-module.exports = gfs
