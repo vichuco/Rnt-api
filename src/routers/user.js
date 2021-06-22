@@ -57,6 +57,13 @@ const storage = new GridFsStorage({
         });
     }
 });
+const conn = mongoose.createConnection(process.env.MONGODB_URL);
+conn.once('open', () => {
+    // Init stream
+    gfs = Grid(conn.db);
+    gfs.collection('uploads');
+    
+})
 const upload = multer({ storage });
 
 //Multer para los audios
