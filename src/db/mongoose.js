@@ -8,11 +8,7 @@ mongoose.connect(process.env.MONGODB_URL, {
     useFindAndModify: false
 
 })
-const db = mongoose.connection;
-db.once('open', function() {
-    gfs = Grid(conn.db);
-    gfs.collection('uploads');
-  });
+
 
 //const conn = mongoose.createConnection(process.env.MONGODB_URL)
 
