@@ -58,13 +58,13 @@ const storage = new GridFsStorage({
     }
 });
 const upload = multer({ storage });
-const conn = mongoose.createConnection(process.env.MONGODB_URL);
+/*const conn = mongoose.createConnection(process.env.MONGODB_URL);
 conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db);
     gfs.collection('uploads');
     
-})
+})*/
 
 
 //Multer para los audios
