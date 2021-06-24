@@ -1,14 +1,8 @@
 const express = require('express');
 const auth = require('../middleware/auth');
-const conn =require('./db/mongoose')
 const router = express.Router()
 
-conn.once('open', () => {
-    // Init stream
-     gfs = Grid(conn.db);
-    gfs.collection('uploads');
-    
-})
+
 router.get('/', function (req, res, next) {
     gfs.files.find().toArray((err, files) => {
         // Check if files
