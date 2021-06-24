@@ -34,8 +34,8 @@ conn.once('open', () => {
     gfs = Grid(conn.db);
     gfs.collection('uploads');
 })*/
-const db = mongoose.connection;
-db.once('open', function() {
+const conn = mongoose.connection;
+conn.once('open', function() {
     gfs = Grid(conn.db);
     gfs.collection('uploads');
   });
