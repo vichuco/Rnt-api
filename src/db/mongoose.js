@@ -12,4 +12,4 @@ Grid.mongo = mongoose.mongo;
 const conn = mongoose.createConnection(process.env.MONGODB_URL)
 
 
-module.exports = conn
+//module.exports = conn

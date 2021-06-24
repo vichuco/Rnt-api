@@ -1,6 +1,6 @@
 const express = require('express');
 const auth = require('../middleware/auth');
-require('./db/mongoose')
+const conn =require('./db/mongoose')
 const router = express.Router()
 
 conn.once('open', () => {
