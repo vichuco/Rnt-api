@@ -34,12 +34,12 @@ conn.once('open', () => {
     gfs = Grid(conn.db);
     gfs.collection('uploads');
 })*/
-const conn = mongoose.connection;
+/*const conn = mongoose.connection;
 conn.once('open', function() {
     gfs = Grid(conn.db);
     gfs.collection('uploads');
   });
-
+*/
 
 // Multer para la base de datos
 const storage = new GridFsStorage({

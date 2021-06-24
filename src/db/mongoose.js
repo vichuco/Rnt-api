@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Grid = require('gridfs-stream')
+
 
 
 mongoose.connect(process.env.MONGODB_URL, {
