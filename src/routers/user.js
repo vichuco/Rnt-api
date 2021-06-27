@@ -12,7 +12,7 @@ const GridFsStorage = require('multer-gridfs-storage')
 const Grid = require('gridfs-stream')
 const path = require('path')
 const iconvlite = require('iconv-lite')
-//const mongoose = require('./db/mongoose')
+const conn = require('./db/mongooseUpload')
 const mongoose = require('mongoose')
 const rimraf = require("rimraf")
 const fetch = require("node-fetch")
@@ -120,7 +120,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
       
-          gfs.find().toArray((err, files) => {
+          conn.gfs.find().toArray((err, files) => {
                 // Check if files
                 if (!files || files.length === 0) {
                     res.render('audio.ejs', { files: false });
