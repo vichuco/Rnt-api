@@ -18,7 +18,7 @@ const rimraf = require("rimraf")
 const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const port = process.env.PORT || 3000
-require('./db/mongooseUpload')
+
 
 
 

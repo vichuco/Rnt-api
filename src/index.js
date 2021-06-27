@@ -1,6 +1,7 @@
 const path = require('path')
 const express = require('express')
 require('./db/mongoose')
+require('./db/mongooseUpload')
 //require('./db/gridfs')
 const userRouter = require('./routers/user')
 const indexRouter = require('./routers/app')
