@@ -1,7 +1,5 @@
 const path = require('path')
 const express = require('express')
-const mongoose = require('mongoose')
-const Grid = require('gridfs-stream')
 //require('./db/mongoose')
 
 //require('./db/gridfs')
@@ -35,13 +33,13 @@ app.use(function (req, res, next) {
         next();
     }
 });
-const conn = mongoose.createConnection(process.env.MONGODB_URL2);
+/*const conn = mongoose.createConnection(process.env.MONGODB_URL2);
 
 conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db);
     gfs.collection('uploads');
-})
+})*/
 
 app.use('/app', indexRouter)
 const port = process.env.PORT || 3000
