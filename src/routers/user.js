@@ -107,10 +107,10 @@ router.post('/users', urlencodedParser, async (req, res) => {
 
 router.post('/login', urlencodedParser, async (req, res) => {
     try {
-        const user = await User.findByCredentials(req.body.email, req.body.password)
-        req.session.userInfo = user
-        const token = await user.generateAuthToken()
-        res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
+        //const user = await User.findByCredentials(req.body.email, req.body.password)
+        //req.session.userInfo = user
+        //const token = await user.generateAuthToken()
+        //res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
         // res.render('audio.ejs', { files: false });
         //res.send({ user, token })
         /*res.send({valid: true})-- aqui comentar*/
