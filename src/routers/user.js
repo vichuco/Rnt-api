@@ -20,13 +20,13 @@ const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const port = process.env.PORT || 3000
 
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
-const conn = mongoose.createConnection(process.env.MONGODB_URL);
+/*const conn = mongoose.createConnection(process.env.MONGODB_URL);
 conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db);
     gfs.collection('uploads');
     
-})
+})*/
 /*const conn = mongoose.connection
 const gfs = null
 conn.once('open', () => {
