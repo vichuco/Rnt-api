@@ -2,7 +2,7 @@ const path = require('path')
 const express = require('express')
 const mongoose = require('mongoose')
 const Grid = require('gridfs-stream')
-require('./db/mongoose')
+//require('./db/mongoose')
 
 //require('./db/gridfs')
 //const conn = require('./db/mongooseUpload')
