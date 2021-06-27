@@ -142,10 +142,6 @@ router.post('/login', urlencodedParser, async (req, res) => {
             })
         })
 
-        
-
-
-
 
     } catch (e) {
         res.status(400).send("usuario o contrasena incorrectas")
