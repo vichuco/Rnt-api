@@ -18,6 +18,10 @@ const rimraf = require("rimraf")
 const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const port = process.env.PORT || 3000
+const mongodb = require('mongodb')
+const MongoClient = mongodb.MongoClient
+const connectionURL = process.env.MONGODB_URL
+const databaseName = 'radio-nt-api'
 
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
 /*const conn = mongoose.createConnection(process.env.MONGODB_URL);
@@ -121,25 +125,34 @@ router.post('/login', urlencodedParser, async (req, res) => {
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
-        
-
-        gfs.find().toArray((err, files) => {
-            // Check if files
-            if (!files || files.length === 0) {
-                res.render('audio.ejs', { files: false });
-            } else {
-                files.map(file => {
-                    if (
-                        file.contentType === 'video/mp4'
-                    ) {
-                        file.isImage = true;
-                    } else {
-                        file.isImage = false;
-                    }
-                });
-                res.render('audio.ejs', { files: files });
+        MongoClient.connect(connectionURL, { useNewUrlParser: true }, (error, client)
+            => {
+            if (error) {
+                return console.log('Unable to connect to database!')
             }
+            const db = client.db(databaseName)
+            var gfs = Grid(db, mongodb);
+            gfs.find().toArray((err, files) => {
+                // Check if files
+                if (!files || files.length === 0) {
+                    res.render('audio.ejs', { files: false });
+                } else {
+                    files.map(file => {
+                        if (
+                            file.contentType === 'video/mp4'
+                        ) {
+                            file.isImage = true;
+                        } else {
+                            file.isImage = false;
+                        }
+                    });
+                    res.render('audio.ejs', { files: files });
+                }
+            })
         })
+
+
+       
     } catch (e) {
         res.status(400).send("usuario o contrasena incorrectas")
     }
