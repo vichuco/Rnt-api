@@ -127,8 +127,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
         
-            const db = client.db(databaseName)
-            var gfs = Grid(db, mongodb);
+           
             gfs.find().toArray((err, files) => {
                 // Check if files
                 if (!files || files.length === 0) {
