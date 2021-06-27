@@ -3,7 +3,7 @@ const express = require('express')
 //require('./db/mongoose')
 
 //require('./db/gridfs')
-//const conn = require('./db/mongooseUpload')
+require('./db/mongooseUpload')
 const userRouter = require('./routers/user')
 const indexRouter = require('./routers/app')
 const loginRouter = require('./routers/login')
