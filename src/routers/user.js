@@ -12,7 +12,6 @@ const GridFsStorage = require('multer-gridfs-storage')
 const Grid = require('gridfs-stream')
 const path = require('path')
 const iconvlite = require('iconv-lite')
-const conn = require('./db/mongooseUpload')
 const mongoose = require('mongoose')
 const rimraf = require("rimraf")
 const fetch = require("node-fetch")
@@ -112,35 +111,35 @@ router.post('/login', urlencodedParser, async (req, res) => {
         req.session.userInfo = user
         const token = await user.generateAuthToken()
         res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
-       // res.render('audio.ejs', { files: false });
+        // res.render('audio.ejs', { files: false });
         //res.send({ user, token })
         /*res.send({valid: true})-- aqui comentar*/
         //res.render('admin', { title: 'Radio Nuevo Tiempo'})
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
-      
-          conn.gfs.find().toArray((err, files) => {
-                // Check if files
-                if (!files || files.length === 0) {
-                    res.render('audio.ejs', { files: false });
-                } else {
-                    files.map(file => {
-                        if (
-                            file.contentType === 'video/mp4'
-                        ) {
-                            file.isImage = true;
-                        } else {
-                            file.isImage = false;
-                        }
-                    });
-                    res.render('audio.ejs', { files: files });
-                }
-            })
-        
+
+        gfs.find().toArray((err, files) => {
+            // Check if files
+            if (!files || files.length === 0) {
+                res.render('audio.ejs', { files: false });
+            } else {
+                files.map(file => {
+                    if (
+                        file.contentType === 'video/mp4'
+                    ) {
+                        file.isImage = true;
+                    } else {
+                        file.isImage = false;
+                    }
+                });
+                res.render('audio.ejs', { files: files });
+            }
+        })
 
 
-       
+
+
     } catch (e) {
         res.status(400).send("usuario o contrasena incorrectas")
     }
