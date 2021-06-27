@@ -22,7 +22,8 @@ const mongodb = require('mongodb')
 const MongoClient = mongodb.MongoClient
 const connectionURL = process.env.MONGODB_URL
 const databaseName = 'radio-nt-api'
-
+var db = new mongo.Db(databaseName, new mongo.Server(connectionURL, process.env.PORT));
+var gfs = Grid(db, mongodb);
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
 /*const conn = mongoose.createConnection(process.env.MONGODB_URL);
 conn.once('open', () => {
@@ -125,11 +126,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
-        MongoClient.connect(connectionURL, { useNewUrlParser: true }, (error, client)
-            => {
-            if (error) {
-                return console.log('Unable to connect to database!')
-            }
+        
             const db = client.db(databaseName)
             var gfs = Grid(db, mongodb);
             gfs.find().toArray((err, files) => {
@@ -149,7 +146,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
                     res.render('audio.ejs', { files: files });
                 }
             })
-        })
+        
 
 
        
