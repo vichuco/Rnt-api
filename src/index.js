@@ -1,9 +1,11 @@
 const path = require('path')
 const express = require('express')
+const mongoose = require('mongoose')
+const Grid = require('gridfs-stream')
 require('./db/mongoose')
-//require('./db/mongooseUpload')
+
 //require('./db/gridfs')
-const conn = require('./db/mongooseUpload')
+//const conn = require('./db/mongooseUpload')
 const userRouter = require('./routers/user')
 const indexRouter = require('./routers/app')
 const loginRouter = require('./routers/login')
@@ -33,6 +35,13 @@ app.use(function (req, res, next) {
         next();
     }
 });
+const conn = mongoose.createConnection(process.env.MONGODB_URL2);
+
+conn.once('open', () => {
+    // Init stream
+    gfs = Grid(conn.db);
+    gfs.collection('uploads');
+})
 
 app.use('/app', indexRouter)
 const port = process.env.PORT || 3000
@@ -41,7 +50,6 @@ app.use(express.json())
 app.use(cookieParser());
 app.use(userApi)
 app.use(userRouter)
-app.use(conn)
 app.use('/login', loginRouter)
 app.use('/upload', uploadRouter)
 app.use('/admin', adminRouter)
