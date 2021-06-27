@@ -117,6 +117,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         req.session.userInfo = user
         const token = await user.generateAuthToken()
         res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
+        res.render('audio.ejs', { files: false });
         //res.send({ user, token })
         /*res.send({valid: true})-- aqui comentar*/
         //res.render('admin', { title: 'Radio Nuevo Tiempo'})
