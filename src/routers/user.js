@@ -21,10 +21,11 @@ const port = process.env.PORT || 3000
 
 
 
-/*const conn = mongoose.createConnection(process.env.MONGODB_URL);
+const conn = mongoose.createConnection(process.env.MONGODB_URL);
 
 //const conn = mongoose.connection
 //const gfs = null
+let gfs;
 conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db);
@@ -107,10 +108,10 @@ router.post('/users', urlencodedParser, async (req, res) => {
 
 router.post('/login', urlencodedParser, async (req, res) => {
     try {
-        //const user = await User.findByCredentials(req.body.email, req.body.password)
-        //req.session.userInfo = user
-        //const token = await user.generateAuthToken()
-        //res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
+        const user = await User.findByCredentials(req.body.email, req.body.password)
+        req.session.userInfo = user
+        const token = await user.generateAuthToken()
+        res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
         // res.render('audio.ejs', { files: false });
         //res.send({ user, token })
         /*res.send({valid: true})-- aqui comentar*/
@@ -118,8 +119,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
-        const conn = mongoose.createConnection(process.env.MONGODB_URL2);
-        conn.once('open', () => {
+       
             // Init stream
             gfs = Grid(conn.db);
             gfs.collection('uploads');
@@ -140,7 +140,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
                     res.render('audio.ejs', { files: files });
                 }
             })
-        })
+        
 
 
     } catch (e) {
