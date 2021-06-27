@@ -1,7 +1,8 @@
 const express = require('express');
 const auth = require('../middleware/auth');
 const router = express.Router()
-
+const Grid = require('gridfs-stream')
+const mongoose = require('mongoose')
 
 router.get('/', function (req, res, next) {
     const conn = mongoose.createConnection(process.env.MONGODB_URL2);
