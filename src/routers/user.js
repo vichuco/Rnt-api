@@ -118,7 +118,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
-        const conn = mongoose.createConnection(process.env.MONGODB_URL);
+        const conn = mongoose.createConnection(process.env.MONGODB_URL2);
         conn.once('open', () => {
             // Init stream
             gfs = Grid(conn.db);
