@@ -18,7 +18,7 @@ const rimraf = require("rimraf")
 const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const port = process.env.PORT || 3000
-const conn = mongoose.createConnection(process.env.MONGODB_URL2);
+
 
 
 
@@ -119,10 +119,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
-        conn.once('open', () => {
-            // Init stream
-            gfs = Grid(conn.db);
-            gfs.collection('uploads');
+      
             
         
             gfs.find().toArray((err, files) => {
@@ -142,7 +139,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
                     res.render('audio.ejs', { files: files });
                 }
             })
-        })
+        
 
 
        
