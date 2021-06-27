@@ -8,4 +8,4 @@ conn.once('open', () => {
     gfs = Grid(conn.db);
     gfs.collection('uploads');
 })
-exports.gfs = gfs
+module.exports = gfs
