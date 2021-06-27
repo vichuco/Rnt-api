@@ -19,7 +19,7 @@ const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const port = process.env.PORT || 3000
 const conn = mongoose.createConnection(process.env.MONGODB_URL2);
-const gfs = null
+let gfs = null
 conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db);
