@@ -19,13 +19,8 @@ const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const port = process.env.PORT || 3000
 const conn = mongoose.createConnection(process.env.MONGODB_URL2);
-let gfs = null
-conn.once('open', () => {
-    // Init stream
-    gfs = Grid(conn.db);
-    gfs.collection('uploads');
-    
-})
+
+
 
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
 
@@ -117,13 +112,19 @@ router.post('/login', urlencodedParser, async (req, res) => {
         req.session.userInfo = user
         const token = await user.generateAuthToken()
         res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
-        res.render('audio.ejs', { files: false });
+       // res.render('audio.ejs', { files: false });
         //res.send({ user, token })
         /*res.send({valid: true})-- aqui comentar*/
         //res.render('admin', { title: 'Radio Nuevo Tiempo'})
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
+        conn.once('open', () => {
+            // Init stream
+            gfs = Grid(conn.db);
+            gfs.collection('uploads');
+            
+        
             gfs.find().toArray((err, files) => {
                 // Check if files
                 if (!files || files.length === 0) {
@@ -141,7 +142,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
                     res.render('audio.ejs', { files: files });
                 }
             })
-        
+        })
 
 
        
