@@ -19,20 +19,16 @@ const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const port = process.env.PORT || 3000
 const mongodb = require('mongodb')
-const MongoClient = mongodb.MongoClient
-const connectionURL = process.env.MONGODB_URL
-const databaseName = 'radio-nt-api'
-var db = new mongo.Db(databaseName, new mongo.Server(connectionURL, process.env.PORT));
-var gfs = Grid(db, mongodb);
-gfs.collection('uploads');
+
+
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
-/*const conn = mongoose.createConnection(process.env.MONGODB_URL);
+const conn = mongoose.createConnection(process.env.MONGODB_URL2);
 conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db);
     gfs.collection('uploads');
     
-})*/
+})
 /*const conn = mongoose.connection
 const gfs = null
 conn.once('open', () => {
@@ -49,7 +45,7 @@ conn.once('open', function() {
 
 // Multer para la base de datos
 const storage = new GridFsStorage({
-    url: process.env.MONGODB_URL,
+    url: process.env.MONGODB_URL2,
     file: (req, file) => {
         return new Promise((resolve, reject) => {
             crypto.randomBytes(16, (err, buf) => {
@@ -127,8 +123,6 @@ router.post('/login', urlencodedParser, async (req, res) => {
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
-        
-           
             gfs.find().toArray((err, files) => {
                 // Check if files
                 if (!files || files.length === 0) {
