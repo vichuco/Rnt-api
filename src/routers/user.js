@@ -120,8 +120,6 @@ router.post('/login', urlencodedParser, async (req, res) => {
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
       
-            
-        
             gfs.find().toArray((err, files) => {
                 // Check if files
                 if (!files || files.length === 0) {
