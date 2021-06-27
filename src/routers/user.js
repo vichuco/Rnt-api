@@ -24,6 +24,7 @@ const connectionURL = process.env.MONGODB_URL
 const databaseName = 'radio-nt-api'
 var db = new mongo.Db(databaseName, new mongo.Server(connectionURL, process.env.PORT));
 var gfs = Grid(db, mongodb);
+gfs.collection('uploads');
 //const conn = mongoose.createConnection(process.env.MONGODB_URL);
 /*const conn = mongoose.createConnection(process.env.MONGODB_URL);
 conn.once('open', () => {
