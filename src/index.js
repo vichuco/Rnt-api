@@ -1,9 +1,6 @@
 const path = require('path')
 const express = require('express')
 require('./db/mongoose')
-
-//require('./db/gridfs')
-//require('./db/mongooseUpload')
 const userRouter = require('./routers/user')
 const indexRouter = require('./routers/app')
 const loginRouter = require('./routers/login')
@@ -20,7 +17,7 @@ app.use(session({ resave: false, saveUninitialized: false, secret: '123456789' }
 const methodOverride = require('method-override')
 
 app.use(function (req, res, next) {
-    if(!req.session.userInfo && (/*req.path === '/upload'  ||*/ req.path === '/login'   ) && req.method === 'GET') {
+    if(!req.session.userInfo && (req.path === '/upload'  || req.path === '/login'   ) && req.method === 'GET') {
         res.redirect('/');
     } 
     else if(req.path === '/logout' && req.method === 'POST'){
@@ -33,16 +30,9 @@ app.use(function (req, res, next) {
         next();
     }
 });
-/*const conn = mongoose.createConnection(process.env.MONGODB_URL2);
-
-conn.once('open', () => {
-    // Init stream
-    gfs = Grid(conn.db);
-    gfs.collection('uploads');
-})*/
 
 app.use('/app', indexRouter)
-const port = process.env.PORT || 3000
+const port = process.env.PORT
 app.use(methodOverride('_method'))
 app.use(express.json())
 app.use(cookieParser());
@@ -72,4 +62,3 @@ app.use(express.static(publicDirectoryPath))
 app.listen(port, () => {
     console.log('Server is up on port .'+ port)
 })
-

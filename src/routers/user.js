@@ -16,31 +16,25 @@ const mongoose = require('mongoose')
 const rimraf = require("rimraf")
 const fetch = require("node-fetch")
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
-const port = process.env.PORT || 3000
-
-
-
-
-const conn = mongoose.createConnection(process.env.MONGODB_URL);
-
-//const conn = mongoose.connection
-//const gfs = null
+const connection = mongoose.connection;
 let gfs;
-conn.once('open', () => {
+
+//MONGODB_URL=mongodb://127.0.0.1:27017/radio-nt-api
+//MONGODB_URL=mongodb+srv://Rnt:download=17@cluster0.fydke.mongodb.net/radio-nt-api?retryWrites=true
+
+
+
+//const conn = mongoose.createConnection(process.env.MONGODB_URL);
+connection.once('open', () => {
     // Init stream
-    gfs = Grid(conn.db);
+    gfs =  Grid(connection.db, mongoose.mongo);
     gfs.collection('uploads');
 })
-/*const conn = mongoose.connection;
-conn.once('open', function() {
-    gfs = Grid(conn.db);
-    gfs.collection('uploads');
-  });*/
 
 
 // Multer para la base de datos
 const storage = new GridFsStorage({
-    url: process.env.MONGODB_URL2,
+    url: process.env.MONGODB_URL,
     file: (req, file) => {
         return new Promise((resolve, reject) => {
             crypto.randomBytes(16, (err, buf) => {
@@ -60,14 +54,6 @@ const storage = new GridFsStorage({
     }
 });
 const upload = multer({ storage });
-/*const conn = mongoose.createConnection(process.env.MONGODB_URL);
-conn.once('open', () => {
-    // Init stream
-    gfs = Grid(conn.db);
-    gfs.collection('uploads');
-    
-})*/
-
 
 //Multer para los audios
 
@@ -112,37 +98,30 @@ router.post('/login', urlencodedParser, async (req, res) => {
         req.session.userInfo = user
         const token = await user.generateAuthToken()
         res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
-        // res.render('audio.ejs', { files: false });
         //res.send({ user, token })
-        /*res.send({valid: true})-- aqui comentar*/
+        /*res.send({valid: true})*/
         //res.render('admin', { title: 'Radio Nuevo Tiempo'})
         //res.send({ user, token })
         // res.setHeader('Authorization', 'Bearer '+ token)
         //req.session.userInfo = ({ token  })
-       
-            // Init stream
-            gfs = Grid(conn.db);
-            gfs.collection('uploads');
-            gfs.find().toArray((err, files) => {
-                // Check if files
-                if (!files || files.length === 0) {
-                    res.render('audio.ejs', { files: false });
-                } else {
-                    files.map(file => {
-                        if (
-                            file.contentType === 'video/mp4'
-                        ) {
-                            file.isImage = true;
-                        } else {
-                            file.isImage = false;
-                        }
-                    });
-                    res.render('audio.ejs', { files: files });
-                }
-            })
-        
-
-
+        //res.render('audio.ejs', { files: false });
+        gfs.files.find().toArray((err, files) => {
+            // Check if files
+            if (!files || files.length === 0) {
+                res.render('audio.ejs', { files: false });
+            } else {
+                files.map(file => {
+                    if (
+                        file.contentType === 'video/mp4'
+                    ) {
+                        file.isImage = true;
+                    } else {
+                        file.isImage = false;
+                    }
+                });
+                res.render('audio.ejs', { files: files });
+            }
+        })
     } catch (e) {
         res.status(400).send("usuario o contrasena incorrectas")
     }
@@ -156,8 +135,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
     // Comprobamos si hay parrilla de semana actual y semana siguiente guardadas en el servidor para luego mostrarlo en el front
     if (fs.existsSync(path + "semana_actual.xlsx")) xlsActual = true
     if (fs.existsSync(path + "semana_siguiente.xlsx")) xlsSiguiente = true
-
-    gfs.find().toArray((err, files) => {
+    gfs.files.find().toArray((err, files) => {
         // Check if files
         if (!files || files.length === 0) {
             //return res.status(404).json({
@@ -182,109 +160,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
             }
             files.forEach(file => {
 
-                fetch('/sound/' + file.filename)
-                    .then(res => {
-                        const dest = fs.createWriteStream(audios + file.filename)
-                        res.body.pipe(dest)
-                    })
-
-
-
-            });
-            const grill = {
-                "categories": [
-                    {
-                        "name": "videos",
-                        "mp4": "https://andres-rnt-api.herokuapp.com/",
-                        "images": "https://andres-rnt-api.herokuapp.com/",
-                        "videos": []
-                    }
-                ]
-            }
-            files.forEach(file => {
-                let saved = true;
-
-                if (file._id !== '') {
-                    let mediaType = "videos/mp4"
-                    const mp4Json = {
-                        "subtitle": "Fusce id nisi turpis. Praesent viverra bibendum semper. Donec tristique, orci sed semper lacinia, quam erat rhoncus massa, non congue tellus est quis tellus",
-                        "sources": [
-                            {
-                                "type": "mp4",
-                                "mime": mediaType,
-                                "url": "sound/" + file.filename
-                            }
-                        ],
-                        //"image": "/p/106/thumbnail/entry_id/" + element.ID + "/width/480/height/200",
-                        "thumb": "thumbnails/headphones-480x270.png",
-                        "image-480x270": "thumbnails/headphones-480x270.png",
-                        "image-780x1200": "thumbnails/headphones-780x1200.png",
-                        "title": file.filename,
-                        "studio": "RNT",
-                        "duration": parseInt(file.length) || 0,
-                    }
-                    grill.categories[0].videos.push(mp4Json);
-
-                    const path = 'public/podcast/podcast.json'
-                    try {
-                        // Si aun no existe el directorio /jsons debe crearse antes de guardar el archivo de la parrilla
-                        if (!fs.existsSync('public/podcast/')) {
-                            fs.mkdirSync('public/podcast/');
-                            const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
-                            fs.writeFileSync(path, str);
-                        } else {
-                            const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
-                            fs.writeFileSync(path, str);
-                        }
-                    } catch (e) {
-                        console.log(e);
-                        // Si se produce algún error se notifica al front para que muestre una alerta
-                        saved = false;
-                        //res.send({saved: false, error: e});
-                    }
-
-                }
-
-            })
-
-
-            res.render('audio.ejs', { files: files });
-            //fs.rmdirSync("public/audios/", {recursive:true})
-
-        }
-
-        //res.redirect('/upload');
-        //res.render('audio.ejs', { files: files });
-
-        //res.render('admin.pug', { title: 'Radio Nuevo Tiempo', xlsActual: xlsActual, xlsSiguiente: xlsSiguiente })
-    })
-
-    /*gfs.files.find().toArray((err, files) => {
-        // Check if files
-        if (!files || files.length === 0) {
-            //return res.status(404).json({
-            //err: 'No files exist'
-            //res.render('admin.pug', { title: 'Radio Nuevo Tiempo', xlsActual: xlsActual, xlsSiguiente: xlsSiguiente });
-            res.render('audio.ejs', { files: false });
-
-        } else {
-            files.map(file => {
-                if (
-                    file.contentType === 'video/mp4'
-                ) {
-                    file.isImage = true;
-                } else {
-                    file.isImage = false;
-                }
-            })
-
-            const audios = "public/audios/"
-            if (!fs.existsSync(audios)) {
-                fs.mkdirSync(audios);
-            }
-            files.forEach(file => {
-
-                fetch('/sound/' + file.filename)
+                fetch('http://localhost:3000/sound/' + file.filename)
                     .then(res => {
                         const dest = fs.createWriteStream(audios + file.filename)
                         res.body.pipe(dest)
@@ -297,8 +173,8 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                         "categories": [
                             {
                                 "name": "videos",
-                                "mp4": "https://andres-rnt-api.herokuapp.com/",
-                                "images": "https://andres-rnt-api.herokuapp.com/",
+                                "mp4": "http://192.168.100.7:3000/",
+                                "images": "http://192.168.100.7:3000/",
                                 "videos": []
                             }
                         ]
@@ -359,7 +235,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
         //res.render('audio.ejs', { files: files });
 
         //res.render('admin.pug', { title: 'Radio Nuevo Tiempo', xlsActual: xlsActual, xlsSiguiente: xlsSiguiente })
-    })*/
+    })
 
     //res.cookie('authcookie', req.token, { maxAge: 900000, httpOnly: true })
 
@@ -387,7 +263,7 @@ router.post('/logout', auth, async (req, res) => {
 })
 
 router.get('/sound/:filename', (req, res) => {
-    Grid.files.findOne({ filename: req.params.filename }, (err, file) => {
+    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
         // Check if file
         if (!file || file.length === 0) {
             return res.status(404).json({
@@ -410,7 +286,7 @@ router.get('/sound/:filename', (req, res) => {
 })
 
 router.get('/json/:filename', (req, res) => {
-    Grid.files.findOne({ filename: req.params.filename }, (err, file) => {
+    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
         // Check if file
         if (!file || file.length === 0) {
             return res.status(404).json({
@@ -434,7 +310,7 @@ router.get('/json/:filename', (req, res) => {
 
 // obtener todos los files en formato json
 router.get('/files', (req, res) => {
-    Grid.files.find().toArray((err, files) => {
+    gfs.files.find().toArray((err, files) => {
         // Check if files
         if (!files || files.length === 0) {
             return res.status(404).json({
@@ -451,11 +327,11 @@ router.get('/files', (req, res) => {
 })
 
 router.delete('/files/:id', (req, res) => {
-    Grid.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
+    gfs.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
         if (err) {
             return res.status(404).json({ err: err });
         }
-        Grid.files.find().toArray((err, files) => {
+        gfs.files.find().toArray((err, files) => {
             // Check if files audio/mpeg
             if (!files || files.length === 0) {
                 res.render('audio.ejs', { files: false });
@@ -544,7 +420,7 @@ function JSONtoGrill(json, filename, res) {
                 "fin": element.Fin,
                 "descripcion": element.Descripcion,
                 "poster": element.Poster,
-                "video": "https://andres-rnt-api.herokuapp.com/bibliaFacil.mp4",
+                "video": "http://192.168.100.7:3000/programas/bibliaFacil.mp4",
             }
             grill.categories[0].files.push(mp4Json);
             const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
