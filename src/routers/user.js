@@ -1,6 +1,7 @@
 const express = require('express')
 const router = new express.Router()
 const User = require('../models/user')
+const Archivo = require('../models/archivoJson')
 const bodyParser = require('body-parser')
 const multer = require('multer')
 const xlsxj = require("xlsx-to-json");
@@ -203,15 +204,19 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                     }
                     grill.categories[0].videos.push(mp4Json);
 
+                    let podcast = new Archivo
+                    
                     const path = 'public/podcast/podcast.json'
                     try {
                         // Si aun no existe el directorio /jsons debe crearse antes de guardar el archivo de la parrilla
                         if (!fs.existsSync('public/podcast/')) {
                             fs.mkdirSync('public/podcast/');
                             const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
+                            podcast.cualquiera = {any : {str}}
                             fs.writeFileSync(path, str);
                         } else {
                             const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
+                            podcast.cualquiera = {any : {str}}
                             fs.writeFileSync(path, str);
                         }
                     } catch (e) {
