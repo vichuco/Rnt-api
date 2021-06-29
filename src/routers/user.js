@@ -93,6 +93,17 @@ router.post('/users', urlencodedParser, async (req, res) => {
     }
 })
 
+router.get('/archivo', async (req, res) => {
+    let file = new Archivo
+    try {
+        const archivo = await file.searchJson()
+        res.status(201).send({ archivo })
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
 router.post('/login', urlencodedParser, async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
