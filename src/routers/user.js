@@ -308,9 +308,12 @@ router.get('/json/:filename', (req, res) => {
     })
 })
 // para obtener json de programacion
-router.get('/public/podcast/podcast.json', (req, res) => {
+router.get('/public/podcast/podcast', (req, res) => {
 
-    return res.json('podcast.json')
+    fs.readFile( __dirname +'/public/podcast/podcast' +".json", 'utf8', function (err, data) {
+        res.send(data);
+        res.end( data );
+    });
 
 })
 
