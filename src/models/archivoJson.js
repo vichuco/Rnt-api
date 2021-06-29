@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
 
-const archivoSchema = new Schema({
+const Mixed = mongoose.Schema.Types.Mixed;
+const archivoSchema = new mongoose.Schema({
 
-    cualquiera: Schema.Types.Mixed
+    cualquiera: Mixed 
 })
 
 const Archivo = mongoose.model('Archivo', archivoSchema)
