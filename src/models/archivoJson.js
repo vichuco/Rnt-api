@@ -6,7 +6,7 @@ const archivoSchema = new mongoose.Schema({
     cualquiera: Mixed
 })
 
-archivoSchema.methods.searchJson = async function (categories) {
+archivoSchema.methods.searchJson = async function () {
     const user = await Archivo.find({categories})
 
     return user
