@@ -160,7 +160,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
             }
             files.forEach(file => {
 
-                fetch('http://localhost:3000/sound/' + file.filename)
+                fetch('https://andres-rnt-api.herokuapp.com/sound/' + file.filename)
                     .then(res => {
                         const dest = fs.createWriteStream(audios + file.filename)
                         res.body.pipe(dest)
@@ -173,8 +173,8 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                         "categories": [
                             {
                                 "name": "videos",
-                                "mp4": "http://192.168.100.7:3000/",
-                                "images": "http://192.168.100.7:3000/",
+                                "mp4": "https://andres-rnt-api.herokuapp.com/",
+                                "images": "https://andres-rnt-api.herokuapp.com/",
                                 "videos": []
                             }
                         ]
@@ -420,7 +420,7 @@ function JSONtoGrill(json, filename, res) {
                 "fin": element.Fin,
                 "descripcion": element.Descripcion,
                 "poster": element.Poster,
-                "video": "http://192.168.100.7:3000/programas/bibliaFacil.mp4",
+                "video": "https://andres-rnt-api.herokuapp.com/programas/bibliaFacil.mp4",
             }
             grill.categories[0].files.push(mp4Json);
             const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
