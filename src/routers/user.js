@@ -213,10 +213,12 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                             fs.mkdirSync('public/podcast/');
                             const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
                             podcast.cualquiera = {any : {str}}
+                             podcast.save()
                             fs.writeFileSync(path, str);
                         } else {
                             const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
                             podcast.cualquiera = {any : {str}}
+                             podcast.save()
                             fs.writeFileSync(path, str);
                         }
                     } catch (e) {
