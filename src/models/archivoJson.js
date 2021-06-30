@@ -6,13 +6,13 @@ const archivoSchema = new mongoose.Schema({
 
     cualquiera: Mixed
 })
-
+archivoSchema.set('toJSON', { getters: true, virtuals: false });
 archivoSchema.methods.searchJson = async function () {
     const user = await Archivo.find({})
-    
-    return user
+    const userJson = user.toJSON()
+    return userJson
 }
 
 const Archivo = mongoose.model('Archivo', archivoSchema)
 
-module.exports = Archivos
+module.exports = Archivo
