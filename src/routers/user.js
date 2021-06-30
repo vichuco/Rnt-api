@@ -216,7 +216,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                     grill.categories[0].videos.push(mp4Json);
 
                     let podcast = new Archivo
-                    podcast.cualquiera = {any : {grill}}
+                    podcast.cualquiera = { grill}
                     podcast.save()
                     
                     const path = 'public/podcast/podcast.json'
