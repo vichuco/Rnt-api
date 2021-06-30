@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const categories = "categories"
+
 const Mixed = mongoose.Schema.Types.Mixed;
 const archivoSchema = new mongoose.Schema({
 
@@ -7,7 +7,7 @@ const archivoSchema = new mongoose.Schema({
 })
 
 archivoSchema.methods.searchJson = async function () {
-    const user = await Archivo.find({categories})
+    const user = await Archivo.find({name:'videos'})
 
     return user
 }
