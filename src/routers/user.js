@@ -97,7 +97,7 @@ router.get('/archivo', async (req, res) => {
     let file = new Archivo
     try {
         const archivo = await file.searchJson()
-        res.status(201).json(file)
+        res.status(201).json(archivo)
     } catch (e) {
         res.status(400).send(e)
     }
