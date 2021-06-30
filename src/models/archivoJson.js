@@ -8,7 +8,7 @@ const archivoSchema = new mongoose.Schema({
 })
 
 archivoSchema.methods.searchJson = async function () {
-    const user = await Archivo.find({"cualquiera":{"grill":{categories}}})
+    const user = await Archivo.find({cualquiera:{grill:{categories}}})
 
     return user
 }
