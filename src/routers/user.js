@@ -162,8 +162,10 @@ router.get('/', function (req, res, next) {
 
 router.post('/users', urlencodedParser, async (req, res) => {
     const user = new User(req.body)
+    
     try {
         await user.save()
+        
         const token = await user.generateAuthToken()
         //res.cookie('authcookie', token, { maxAge: 90000, httpOnly: true })
         req.session.user = user
@@ -199,6 +201,7 @@ router.get('/programacion', async (req, res) => {
 ////////////////////////
 router.post('/login', urlencodedParser, async (req, res) => {
     try {
+        Programacion.collection.drop()
         const user = await User.findByCredentials(req.body.email, req.body.password)
         req.session.userInfo = user
         const token = await user.generateAuthToken()
@@ -237,6 +240,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
     xlsActual = false
     xlsSiguiente = false
     const path = "public/xls/"
+    Archivo.collection.drop()
     // Comprobamos si hay parrilla de semana actual y semana siguiente guardadas en el servidor para luego mostrarlo en el front
     if (fs.existsSync(path + "semana_actual.xlsx")) xlsActual = true
     if (fs.existsSync(path + "semana_siguiente.xlsx")) xlsSiguiente = true
@@ -308,9 +312,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                     }
                     grill.categories[0].videos.push(mp4Json);
 
-                    let podcast = new Archivo
-                    podcast.cualquiera = { grill}
-                    podcast.save()
+                    
                     
                     const path = 'public/podcast/podcast.json'
                     try {
@@ -337,6 +339,9 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                 }
 
             })
+            let podcast = new Archivo
+                    podcast.cualquiera = { grill}
+                    podcast.save()
 
 
             res.render('audio.ejs', { files: files });
@@ -499,6 +504,7 @@ const xlsUpload = multer({
 /* Función que convierte los ficheros xlsx de la parrilla a json para luego tratarlos */
 function xlsToJSON(filename, res) {
     const path = 'public/xls/' + filename
+   // Programacion.collection.drop()
     //const path =  filename
     xlsxj({
         input: path,
@@ -516,6 +522,7 @@ function xlsToJSON(filename, res) {
 
 function JSONtoGrill(json, filename, res) {
     let saved = true;
+    
     const grill = {
         "categories": [
             {
@@ -565,10 +572,12 @@ function JSONtoGrill(json, filename, res) {
     let programacion = new Programacion
             programacion.any = { grill}
             programacion.save()
+            alerta = true
     // En caso de que se haya guardado correctamente el archivo se notifica al front para que muestre la alerta
     if (saved) {
-        res.send({ saved: true });
-        // res.redirect('/login')
+        //res.send({ saved: true });
+         //res.redirect('/admin')
+         res.render('admin.pug', { title: 'Radio Nuevo Tiempo', alerta:alerta });
     }
 
 }
@@ -664,6 +673,7 @@ function JSONtoGrill(json, filename, res) {
 /* POST para añadir la parrilla de radio */
 // Antes de guardar el archivo se debe comprobar si la sesión está iniciada para evitar que se suban archivos sin permiso
 router.post('/addgrill', xlsUpload.single('file'), function (req, res) {
+    
     xlsToJSON(req.file.filename, res); // Llamada a función que transforma el xlsx a json
 })
 
