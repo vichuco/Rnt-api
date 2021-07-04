@@ -2,8 +2,9 @@ const express = require('express')
 const router = new express.Router()
 const User = require('../models/user')
 const Archivo = require('../models/archivoJson')
-const bodyParser = require('body-parser')
+const Thumb = require('../models/thumb')
 const multer = require('multer')
+const bodyParser = require('body-parser')
 const xlsxj = require("xlsx-to-json");
 const auth = require('../middleware/auth')
 const http = require('http')
@@ -16,6 +17,8 @@ const iconvlite = require('iconv-lite')
 const mongoose = require('mongoose')
 const rimraf = require("rimraf")
 const fetch = require("node-fetch")
+const ObjectId = require('mongoose').Types.ObjectId; 
+const sharp = require('sharp')
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const connection = mongoose.connection;
 let gfs;
@@ -76,6 +79,64 @@ const audioUpload = multer({
 })
 
 
+// multer y ruta de tumbs //////////////////////
+
+const thumUpload = multer({
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Please upload an image'))
+        }
+
+        cb(undefined, true)
+    }
+})
+
+//// post para 480*270///
+router.post('/Thumb480-270', thumUpload.single('avatar'), async (req, res) => {
+    
+    const buffer = await sharp(req.file.buffer).resize({ width: 480, height: 270 }).png().toBuffer()
+    const thumb = new Thumb
+    thumb.avatar = buffer
+    await thumb.save()
+    res.send()
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message })
+})
+
+/// post para 780*1200///
+router.post('/Thumb780-1200', thumUpload.single('avatar'), async (req, res) => {
+    
+    const buffer = await sharp(req.file.buffer).resize({ width: 780, height: 1200 }).png().toBuffer()
+    const thumb = new Thumb
+    thumb.avatar = buffer
+    await thumb.save()
+    res.send()
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message })
+})
+
+//------------- get thumbs ------------------------
+
+router.get('/Thumb480-270/:id', async (req, res) => {
+    try {
+        
+
+        const thumb = await Thumb.findById(req.params.id)
+
+        if (!thumb || !thumb.avatar) {
+            throw new Error()
+        }
+
+        res.set('Content-Type', 'image/png')
+        res.send(thumb.avatar)
+    } catch (e) {
+        res.status(404).send()
+    }
+})
+
 router.get('/', function (req, res, next) {
     res.render('login.pug', { title: 'Radio Nuevo Tiempo' });
 });
@@ -97,7 +158,7 @@ router.get('/archivo', async (req, res) => {
     let file = new Archivo
     try {
         const archivo = await file.searchJson()
-        res.status(201).send({ archivo })
+        res.status(201).json( archivo )
     } catch (e) {
         res.status(400).send(e)
     }
@@ -206,8 +267,8 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                             }
                         ],
                         //"image": "/p/106/thumbnail/entry_id/" + element.ID + "/width/480/height/200",
-                        "thumb": "thumbnails/headphones-480x270.png",
-                        "image-480x270": "thumbnails/headphones-480x270.png",
+                        "thumb": "Thumb480-270/60dd501e10ae6335c425f146",
+                        "image-480x270": "Thumb480-270/60dd501e10ae6335c425f146",
                         "image-780x1200": "thumbnails/headphones-780x1200.png",
                         "title": file.filename,
                         "studio": "RNT",

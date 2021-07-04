@@ -8,9 +8,9 @@ const archivoSchema = new mongoose.Schema({
 })
 
 archivoSchema.methods.searchJson = async function () {
-    const user = await Archivo.find({grill:'categories'})
-
+    const user = await Archivo.find({}).select('cualquiera -_id')
     return user
+    //.select('cualquiera.grill.categories -_id')
 }
 
 const Archivo = mongoose.model('Archivo', archivoSchema)
