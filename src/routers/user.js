@@ -184,6 +184,19 @@ router.get('/archivo', async (req, res) => {
 
 })
 
+///get programacion // 
+
+router.get('/programacion', async (req, res) => {
+    let file = new Programacion
+    try {
+        const archivo = await file.searchProgramacion()
+        res.status(201).json( archivo )
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+////////////////////////
 router.post('/login', urlencodedParser, async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
@@ -524,10 +537,7 @@ function JSONtoGrill(json, filename, res) {
                 "poster": element.Poster,
                 "video": "https://andres-rnt-api.herokuapp.com/programas/bibliaFacil.mp4",
             }
-            grill.categories[0].files.push(mp4Json);
-            let programacion = new Programacion
-            programacion.any = { grill}
-            programacion.save()
+            grill.categories[0].files.push(mp4Json);            
             const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
             const path2 = 'public/jsons/' + element.Programa.replace(/\s+/g, '') + ".json";
             try {
@@ -552,6 +562,9 @@ function JSONtoGrill(json, filename, res) {
             }
         }
     })
+    let programacion = new Programacion
+            programacion.any = { grill}
+            programacion.save()
     // En caso de que se haya guardado correctamente el archivo se notifica al front para que muestre la alerta
     if (saved) {
         res.send({ saved: true });
