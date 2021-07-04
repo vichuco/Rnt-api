@@ -2,6 +2,7 @@ const express = require('express')
 const router = new express.Router()
 const User = require('../models/user')
 const Archivo = require('../models/archivoJson')
+const Programacion = require('../models/programacion')
 const Thumb = require('../models/thumb')
 const multer = require('multer')
 const bodyParser = require('body-parser')
@@ -86,7 +87,7 @@ const thumUpload = multer({
         fileSize: 1000000
     },
     fileFilter(req, file, cb) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|svg)$/)) {
             return cb(new Error('Please upload an image'))
         }
 
@@ -121,6 +122,24 @@ router.post('/Thumb780-1200', thumUpload.single('avatar'), async (req, res) => {
 //------------- get thumbs ------------------------
 
 router.get('/Thumb480-270/:id', async (req, res) => {
+    try {
+        
+
+        const thumb = await Thumb.findById(req.params.id)
+
+        if (!thumb || !thumb.avatar) {
+            throw new Error()
+        }
+
+        res.set('Content-Type', 'image/png')
+        res.send(thumb.avatar)
+    } catch (e) {
+        res.status(404).send()
+    }
+})
+
+/// thumb 780*1200 **************-----
+router.get('/Thumb780-1200/:id', async (req, res) => {
     try {
         
 
@@ -267,9 +286,9 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                             }
                         ],
                         //"image": "/p/106/thumbnail/entry_id/" + element.ID + "/width/480/height/200",
-                        "thumb": "Thumb480-270/60dd501e10ae6335c425f146",
-                        "image-480x270": "Thumb480-270/60dd501e10ae6335c425f146",
-                        "image-780x1200": "thumbnails/headphones-780x1200.png",
+                        "thumb": "Thumb480-270/60e129245000c0347044246a",
+                        "image-480x270": "Thumb480-270/60e129245000c0347044246a",
+                        "image-780x1200": "Thumb780-1200/60e12a203f2fc037f8b84ba2",
                         "title": file.filename,
                         "studio": "RNT",
                         "duration": parseInt(file.length) || 0,
@@ -467,6 +486,7 @@ const xlsUpload = multer({
 /* Función que convierte los ficheros xlsx de la parrilla a json para luego tratarlos */
 function xlsToJSON(filename, res) {
     const path = 'public/xls/' + filename
+    //const path =  filename
     xlsxj({
         input: path,
         output: path.replace(".xlsx", ".json"),
@@ -505,6 +525,9 @@ function JSONtoGrill(json, filename, res) {
                 "video": "https://andres-rnt-api.herokuapp.com/programas/bibliaFacil.mp4",
             }
             grill.categories[0].files.push(mp4Json);
+            let programacion = new Programacion
+            programacion.any = { grill}
+            programacion.save()
             const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
             const path2 = 'public/jsons/' + element.Programa.replace(/\s+/g, '') + ".json";
             try {
