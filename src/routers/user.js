@@ -22,6 +22,8 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const sharp = require('sharp')
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const connection = mongoose.connection;
+let podcast = new Archivo
+let programacion = new Programacion
 let gfs;
 
 //MONGODB_URL=mongodb://127.0.0.1:27017/radio-nt-api
@@ -175,11 +177,20 @@ router.post('/users', urlencodedParser, async (req, res) => {
     }
 })
 
+
+
 router.get('/archivo', async (req, res) => {
-    let file = new Archivo
+    let file =podcast
     try {
         const archivo = await file.searchJson()
-        res.status(201).json( archivo )
+        for(const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                break;
+            }   
+        }
+        
+        res.status(201).json( result )
     } catch (e) {
         res.status(400).send(e)
     }
@@ -189,10 +200,16 @@ router.get('/archivo', async (req, res) => {
 ///get programacion // 
 
 router.get('/programacion', async (req, res) => {
-    let file = new Programacion
+    let file = programacion
     try {
         const archivo = await file.searchProgramacion()
-        res.status(201).json( archivo )
+        for(const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                break;
+            }   
+        }
+        res.status(201).json( result )
     } catch (e) {
         res.status(400).send(e)
     }
@@ -339,7 +356,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                 }
 
             })
-            let podcast = new Archivo
+           
                     podcast.cualquiera = { grill}
                     podcast.save()
 

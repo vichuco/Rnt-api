@@ -4,7 +4,7 @@ const Mixed = mongoose.Schema.Types.Mixed;
 
 const archivoSchema = new mongoose.Schema({
 
-    cualquiera: Mixed
+    cualquiera: {}
 })
 
 archivoSchema.methods.searchJson = async function () {
