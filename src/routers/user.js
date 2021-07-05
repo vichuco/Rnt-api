@@ -18,12 +18,13 @@ const iconvlite = require('iconv-lite')
 const mongoose = require('mongoose')
 const rimraf = require("rimraf")
 const fetch = require("node-fetch")
-const ObjectId = require('mongoose').Types.ObjectId; 
+const ObjectId = require('mongoose').Types.ObjectId;
 const sharp = require('sharp')
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 const connection = mongoose.connection;
 let podcast = new Archivo
 let programacion = new Programacion
+
 let gfs;
 
 //MONGODB_URL=mongodb://127.0.0.1:27017/radio-nt-api
@@ -99,7 +100,7 @@ const thumUpload = multer({
 
 //// post para 480*270///
 router.post('/Thumb480-270', thumUpload.single('avatar'), async (req, res) => {
-    
+
     const buffer = await sharp(req.file.buffer).resize({ width: 480, height: 270 }).png().toBuffer()
     const thumb = new Thumb
     thumb.avatar = buffer
@@ -111,7 +112,7 @@ router.post('/Thumb480-270', thumUpload.single('avatar'), async (req, res) => {
 
 /// post para 780*1200///
 router.post('/Thumb780-1200', thumUpload.single('avatar'), async (req, res) => {
-    
+
     const buffer = await sharp(req.file.buffer).resize({ width: 780, height: 1200 }).png().toBuffer()
     const thumb = new Thumb
     thumb.avatar = buffer
@@ -125,7 +126,7 @@ router.post('/Thumb780-1200', thumUpload.single('avatar'), async (req, res) => {
 
 router.get('/Thumb480-270/:id', async (req, res) => {
     try {
-        
+
 
         const thumb = await Thumb.findById(req.params.id)
 
@@ -143,7 +144,7 @@ router.get('/Thumb480-270/:id', async (req, res) => {
 /// thumb 780*1200 **************-----
 router.get('/Thumb780-1200/:id', async (req, res) => {
     try {
-        
+
 
         const thumb = await Thumb.findById(req.params.id)
 
@@ -164,10 +165,10 @@ router.get('/', function (req, res, next) {
 
 router.post('/users', urlencodedParser, async (req, res) => {
     const user = new User(req.body)
-    
+
     try {
         await user.save()
-        
+
         const token = await user.generateAuthToken()
         //res.cookie('authcookie', token, { maxAge: 90000, httpOnly: true })
         req.session.user = user
@@ -180,17 +181,17 @@ router.post('/users', urlencodedParser, async (req, res) => {
 
 
 router.get('/archivo', async (req, res) => {
-    let file =podcast
+    let file = podcast
     try {
         const archivo = await file.searchJson()
-        for(const i = 0; i < archivo.length; i++) {
+        for (const i = 0; i < archivo.length; i++) {
             result = archivo[i]
             if (result) {
                 break;
-            }   
+            }
         }
-        
-        res.status(201).json( result )
+
+        res.status(201).json(result)
     } catch (e) {
         res.status(400).send(e)
     }
@@ -203,19 +204,39 @@ router.get('/programacion', async (req, res) => {
     let file = programacion
     try {
         const archivo = await file.searchProgramacion()
-        for(const i = 0; i < archivo.length; i++) {
+        for (const i = 0; i < archivo.length; i++) {
             result = archivo[i]
             if (result) {
                 break;
-            }   
+            }
         }
-        res.status(201).json( result )
+        res.status(201).json(result)
     } catch (e) {
         res.status(400).send(e)
     }
 
 })
-////////////////////////
+////////////////////////get detalle programa////////////
+//////////////////////get angeles de esperanza////////////
+router.get('/AngelesdeEsperanza', async (req, res) => {
+    let file = programacion
+    try {
+        const archivo = await file.searchProgramacion()
+        for (const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                categories = result.any["grill"].categories[0].files[0]
+                break
+               
+            }       
+        }
+        res.status(201).json(categories)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
 router.post('/login', urlencodedParser, async (req, res) => {
     try {
         Programacion.collection.drop()
@@ -329,21 +350,21 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                     }
                     grill.categories[0].videos.push(mp4Json);
 
-                    
-                    
+
+
                     const path = 'public/podcast/podcast.json'
                     try {
                         // Si aun no existe el directorio /jsons debe crearse antes de guardar el archivo de la parrilla
                         if (!fs.existsSync('public/podcast/')) {
                             fs.mkdirSync('public/podcast/');
                             const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
-                            
+
                             // podcast.save()
                             fs.writeFileSync(path, str);
                         } else {
                             const str = iconvlite.encode(JSON.stringify(grill), 'iso-8859-1'); // Se codifica usando iso-8859-1 para que incluya tanto tildes como ñ
-                           // podcast.cualquiera = {any : {str}}
-                             //podcast.save()
+                            // podcast.cualquiera = {any : {str}}
+                            //podcast.save()
                             fs.writeFileSync(path, str);
                         }
                     } catch (e) {
@@ -356,9 +377,9 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                 }
 
             })
-           
-                    podcast.cualquiera = { grill}
-                    podcast.save()
+
+            podcast.cualquiera = { grill }
+            podcast.save()
 
 
             res.render('audio.ejs', { files: files });
@@ -521,7 +542,7 @@ const xlsUpload = multer({
 /* Función que convierte los ficheros xlsx de la parrilla a json para luego tratarlos */
 function xlsToJSON(filename, res) {
     const path = 'public/xls/' + filename
-   // Programacion.collection.drop()
+    // Programacion.collection.drop()
     //const path =  filename
     xlsxj({
         input: path,
@@ -539,7 +560,7 @@ function xlsToJSON(filename, res) {
 
 function JSONtoGrill(json, filename, res) {
     let saved = true;
-    
+
     const grill = {
         "categories": [
             {
@@ -561,10 +582,14 @@ function JSONtoGrill(json, filename, res) {
                 "poster": element.Poster,
                 "video": "https://andres-rnt-api.herokuapp.com/programas/bibliaFacil.mp4",
             }
-            grill.categories[0].files.push(mp4Json);            
+
+            grill.categories[0].files.push(mp4Json);
+
+
             const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
             const path2 = 'public/jsons/' + element.Programa.replace(/\s+/g, '') + ".json";
             try {
+                
                 // Si aun no existe el directorio /jsons debe crearse antes de guardar el archivo de la parrilla
                 if (!fs.existsSync('public/jsons/')) {
                     fs.mkdirSync('public/jsons/');
@@ -585,16 +610,18 @@ function JSONtoGrill(json, filename, res) {
                 res.send({ saved: false, error: e });
             }
         }
+
     })
     let programacion = new Programacion
-            programacion.any = { grill}
-            programacion.save()
-            alerta = true
+    programacion.any = { grill }
+    programacion.save()
+
+    alerta = true
     // En caso de que se haya guardado correctamente el archivo se notifica al front para que muestre la alerta
     if (saved) {
         //res.send({ saved: true });
-         //res.redirect('/admin')
-         res.render('admin.pug', { title: 'Radio Nuevo Tiempo', alerta:alerta });
+        //res.redirect('/admin')
+        res.render('admin.pug', { title: 'Radio Nuevo Tiempo', alerta: alerta });
     }
 
 }
@@ -690,7 +717,7 @@ function JSONtoGrill(json, filename, res) {
 /* POST para añadir la parrilla de radio */
 // Antes de guardar el archivo se debe comprobar si la sesión está iniciada para evitar que se suban archivos sin permiso
 router.post('/addgrill', xlsUpload.single('file'), function (req, res) {
-    
+
     xlsToJSON(req.file.filename, res); // Llamada a función que transforma el xlsx a json
 })
 
