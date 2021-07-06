@@ -236,7 +236,186 @@ router.get('/AngelesdeEsperanza', async (req, res) => {
     }
 
 })
+////lecciones de la biblia
+router.get('/LeccionesdelaBiblia', async (req, res) => {
+    let file = programacion
+    try {
+        const archivo = await file.searchProgramacion()
+        for (const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                categories = result.any["grill"].categories[0].files[1]
+                break
+               
+            }       
+        }
+        res.status(201).json(categories)
+    } catch (e) {
+        res.status(400).send(e)
+    }
 
+})
+
+////LibertadsinLimetes
+router.get('/LibertadsinLimetes', async (req, res) => {
+    let file = programacion
+    try {
+        const archivo = await file.searchProgramacion()
+        for (const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                categories = result.any["grill"].categories[0].files[2]
+                break
+               
+            }       
+        }
+        res.status(201).json(categories)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
+////Decifrando el Futuro
+router.get('/DecifrandoelFuturo', async (req, res) => {
+    let file = programacion
+    try {
+        const archivo = await file.searchProgramacion()
+        for (const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                categories = result.any["grill"].categories[0].files[3]
+                break
+               
+            }       
+        }
+        res.status(201).json(categories)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
+////La voz de la Esperanza
+router.get('/LavozdelaEsperanza', async (req, res) => {
+    let file = programacion
+    try {
+        const archivo = await file.searchProgramacion()
+        for (const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                categories = result.any["grill"].categories[0].files[4]
+                break
+               
+            }       
+        }
+        res.status(201).json(categories)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
+////Revista Mujer
+router.get('/RevistaMujer', async (req, res) => {
+    let file = programacion
+    try {
+        const archivo = await file.searchProgramacion()
+        for (const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                categories = result.any["grill"].categories[0].files[5]
+                break
+               
+            }       
+        }
+        res.status(201).json(categories)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
+////Biblia Facil
+router.get('/BibliaFacil', async (req, res) => {
+    let file = programacion
+    try {
+        const archivo = await file.searchProgramacion()
+        for (const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                categories = result.any["grill"].categories[0].files[6]
+                break
+               
+            }       
+        }
+        res.status(201).json(categories)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
+////Lugar de Paz
+router.get('/LugardePaz', async (req, res) => {
+    let file = programacion
+    try {
+        const archivo = await file.searchProgramacion()
+        for (const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                categories = result.any["grill"].categories[0].files[7]
+                break
+               
+            }       
+        }
+        res.status(201).json(categories)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
+////Maravillas de la Naturaleza
+router.get('/MaravillasdelaNaturaleza', async (req, res) => {
+    let file = programacion
+    try {
+        const archivo = await file.searchProgramacion()
+        for (const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                categories = result.any["grill"].categories[0].files[8]
+                break
+               
+            }       
+        }
+        res.status(201).json(categories)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
+
+
+////Ven acercate
+router.get('/Venacercate', async (req, res) => {
+    let file = programacion
+    try {
+        const archivo = await file.searchProgramacion()
+        for (const i = 0; i < archivo.length; i++) {
+            result = archivo[i]
+            if (result) {
+                categories = result.any["grill"].categories[0].files[9]
+                break
+               
+            }       
+        }
+        res.status(201).json(categories)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+
+})
 router.post('/login', urlencodedParser, async (req, res) => {
     try {
         Programacion.collection.drop()
