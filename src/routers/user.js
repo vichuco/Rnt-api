@@ -556,7 +556,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                 }
 
             })
-
+            let podcast = new Archivo
             podcast.cualquiera = { grill }
             podcast.save()
 
