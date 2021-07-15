@@ -201,7 +201,7 @@ router.get('/archivo', async (req, res) => {
 ///get programacion // 
 
 router.get('/programacion', async (req, res) => {
-    let file = programacion
+    let file =new  Programacion
     try {
         const archivo = await file.searchProgramacion()
         for (const i = 0; i < archivo.length; i++) {
@@ -418,18 +418,12 @@ router.get('/Venacercate', async (req, res) => {
 })
 router.post('/login', urlencodedParser, async (req, res) => {
     try {
-        Programacion.collection.drop()
+        //Programacion.collection.drop()
         const user = await User.findByCredentials(req.body.email, req.body.password)
         req.session.userInfo = user
         const token = await user.generateAuthToken()
         res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
-        //res.send({ user, token })
-        /*res.send({valid: true})*/
-        //res.render('admin', { title: 'Radio Nuevo Tiempo'})
-        //res.send({ user, token })
-        // res.setHeader('Authorization', 'Bearer '+ token)
-        //req.session.userInfo = ({ token  })
-        //res.render('audio.ejs', { files: false });
+
         gfs.files.find().toArray((err, files) => {
             // Check if files
             if (!files || files.length === 0) {
@@ -520,7 +514,7 @@ router.post('/upload', auth, upload.single('file'), (req, res) => {
                             }
                         ],
                         //"image": "/p/106/thumbnail/entry_id/" + element.ID + "/width/480/height/200",
-                        "thumb": "Thumb480-270/60e129245000c0347044246a",
+                        "thumb": "Thumb480-270/",
                         "image-480x270": "Thumb480-270/60e129245000c0347044246a",
                         "image-780x1200": "Thumb780-1200/60e12a203f2fc037f8b84ba2",
                         "title": file.filename,
@@ -721,7 +715,7 @@ const xlsUpload = multer({
 /* Función que convierte los ficheros xlsx de la parrilla a json para luego tratarlos */
 function xlsToJSON(filename, res) {
     const path = 'public/xls/' + filename
-    // Programacion.collection.drop()
+     ///programacion.collection.drop()
     //const path =  filename
     xlsxj({
         input: path,
@@ -732,6 +726,7 @@ function xlsToJSON(filename, res) {
             console.error(err)
             res.send({ saved: false, error: err });
         } else {
+            //Programacion.collection.drop()
             JSONtoGrill(result, filename, res);
         }
     })
