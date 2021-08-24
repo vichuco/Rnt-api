@@ -201,7 +201,7 @@ router.get('/archivo', async (req, res) => {
 ///get programacion // 
 
 router.get('/programacion', async (req, res) => {
-    let file =new  Programacion
+    let file = new Programacion
     try {
         const archivo = await file.searchProgramacion()
         for (const i = 0; i < archivo.length; i++) {
@@ -227,8 +227,8 @@ router.get('/AngelesdeEsperanza', async (req, res) => {
             if (result) {
                 categories = result.any["grill"].categories[0].files[0]
                 break
-               
-            }       
+
+            }
         }
         res.status(201).json(categories)
     } catch (e) {
@@ -246,8 +246,8 @@ router.get('/LeccionesdelaBiblia', async (req, res) => {
             if (result) {
                 categories = result.any["grill"].categories[0].files[1]
                 break
-               
-            }       
+
+            }
         }
         res.status(201).json(categories)
     } catch (e) {
@@ -266,8 +266,8 @@ router.get('/LibertadsinLimetes', async (req, res) => {
             if (result) {
                 categories = result.any["grill"].categories[0].files[2]
                 break
-               
-            }       
+
+            }
         }
         res.status(201).json(categories)
     } catch (e) {
@@ -286,8 +286,8 @@ router.get('/DecifrandoelFuturo', async (req, res) => {
             if (result) {
                 categories = result.any["grill"].categories[0].files[3]
                 break
-               
-            }       
+
+            }
         }
         res.status(201).json(categories)
     } catch (e) {
@@ -306,8 +306,8 @@ router.get('/LavozdelaEsperanza', async (req, res) => {
             if (result) {
                 categories = result.any["grill"].categories[0].files[4]
                 break
-               
-            }       
+
+            }
         }
         res.status(201).json(categories)
     } catch (e) {
@@ -326,8 +326,8 @@ router.get('/RevistaMujer', async (req, res) => {
             if (result) {
                 categories = result.any["grill"].categories[0].files[5]
                 break
-               
-            }       
+
+            }
         }
         res.status(201).json(categories)
     } catch (e) {
@@ -346,8 +346,8 @@ router.get('/BibliaFacil', async (req, res) => {
             if (result) {
                 categories = result.any["grill"].categories[0].files[6]
                 break
-               
-            }       
+
+            }
         }
         res.status(201).json(categories)
     } catch (e) {
@@ -366,8 +366,8 @@ router.get('/LugardePaz', async (req, res) => {
             if (result) {
                 categories = result.any["grill"].categories[0].files[7]
                 break
-               
-            }       
+
+            }
         }
         res.status(201).json(categories)
     } catch (e) {
@@ -386,8 +386,8 @@ router.get('/MaravillasdelaNaturaleza', async (req, res) => {
             if (result) {
                 categories = result.any["grill"].categories[0].files[8]
                 break
-               
-            }       
+
+            }
         }
         res.status(201).json(categories)
     } catch (e) {
@@ -407,8 +407,8 @@ router.get('/Venacercate', async (req, res) => {
             if (result) {
                 categories = result.any["grill"].categories[0].files[9]
                 break
-               
-            }       
+
+            }
         }
         res.status(201).json(categories)
     } catch (e) {
@@ -585,7 +585,11 @@ router.post('/logout', auth, async (req, res) => {
         await req.user.save()
         req.session.destroy()
         //res.send()
-        res.render('login.pug', { title: 'Radio Nuevo Tiempo' })
+        //res.render('login.pug', { title: 'Radio Nuevo Tiempo' })
+        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+        res.header('Expires', '-1');
+        res.header('Pragma', 'no-cache');
+        res.redirect('/');
     } catch (e) {
         res.status(500).send()
     }
@@ -715,7 +719,7 @@ const xlsUpload = multer({
 /* Función que convierte los ficheros xlsx de la parrilla a json para luego tratarlos */
 function xlsToJSON(filename, res) {
     const path = 'public/xls/' + filename
-     ///programacion.collection.drop()
+    ///programacion.collection.drop()
     //const path =  filename
     xlsxj({
         input: path,
@@ -763,7 +767,7 @@ function JSONtoGrill(json, filename, res) {
             const path = 'public/jsons/' + filename.replace(".xlsx", ".json");
             const path2 = 'public/jsons/' + element.Programa.replace(/\s+/g, '') + ".json";
             try {
-                
+
                 // Si aun no existe el directorio /jsons debe crearse antes de guardar el archivo de la parrilla
                 if (!fs.existsSync('public/jsons/')) {
                     fs.mkdirSync('public/jsons/');

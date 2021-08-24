@@ -33,11 +33,14 @@
       <img class="header__logo" src="/img/cabecera.png" alt="">
     </a>
 
-  </header>
+    </header>
   <div class="nav-bg">
     <nav class="navegacion contenedor">
       <a href="/admin">Administrador</a>
       <a href="/podcast">Podcast</a>
+      <form  method="POST" action="/logout">
+        <button class="navegacionContenedor" id="cerrar" >Cerrar sesión</button>
+      </form>
     </nav>
   </div>
   <main>
@@ -73,7 +76,6 @@
                   <% } %>
 
         </div>
-        <a href="/admin">Siguiente</a>
       </div>
 
     </div>

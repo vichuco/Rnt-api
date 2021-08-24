@@ -5,15 +5,17 @@ block content
         .header
             a(href="/user") 
             img(src="/img/cabecera.png", alt="logoadmin")
+            
     div(class='nav-bg')
         nav(class='navegacion contenedor') 
             a(class='navegacionE' href="/admin") Administrador
             a(class='navegacionE' href="/podcast") Podcast
+            form(method='POST', action='/logout')
+                input.navegacionContenedor(id='cerrar' type='submit' value="Cerrar sesión")
     .buttonHeader
         form(action='/app')
             input.adminButton(type='submit' value='API')
-        form.logoutForm(method='POST', action='/logout')
-            input.logoutButton(type='submit' value="Cerrar sesión")
+        
     h1 Subir un archivo con extensión .xlsx para la parrilla
     p El nombre del archivo debe seguir el formato semana_actual.xlsx ó semana_siguiente.xlsx
 

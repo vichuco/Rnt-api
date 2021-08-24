@@ -94,6 +94,22 @@ a {
     font-weight: bold;
     text-decoration: none;
 }
+.navegacionContenedor{
+  
+    color:white;
+    font-size: 20px;
+    padding: 14px 0;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #007bff;
+    text-decoration: none;
+    border: none;
+}
+#cerrar:hover
+	{
+		background-color:#FFC107;
+    color: black;
+	}
 .contenedor{
     width: 1200px;
     margin: 0 auto;
