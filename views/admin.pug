@@ -1,6 +1,14 @@
 extends layoutAdmin
 
 block content
+    header 
+        .header
+            a(href="/user") 
+            img(src="/img/cabecera.png", alt="logoadmin")
+    div(class='nav-bg')
+        nav(class='navegacion contenedor') 
+            a(class='navegacionE' href="/admin") Administrador
+            a(class='navegacionE' href="/podcast") Podcast
     .buttonHeader
         form(action='/app')
             input.adminButton(type='submit' value='API')
