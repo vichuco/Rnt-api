@@ -60,7 +60,7 @@
             <% files.forEach(function(file) { %>
               <div class="card card-body mb-3">
                 <% if(file.isImage) { %>
-                  <p><% file.filename %></p>
+                  <p class="tituloPodcast"><%= file.filename %></p>
                   <video controls preload="none" src="sound/<%= file.filename %>">
                     <% } else { %>
                       <%= file.filename %>

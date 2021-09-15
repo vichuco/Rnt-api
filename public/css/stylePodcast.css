@@ -57,3 +57,7 @@ body{
 		background-color:#FFC107;
     color: black;
 	}
+
+.tituloPodcast{
+    font-weight: bold;
+}
