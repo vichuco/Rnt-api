@@ -8,7 +8,6 @@ const multer = require('multer')
 const bodyParser = require('body-parser')
 const xlsxj = require("xlsx-to-json");
 const auth = require('../middleware/auth')
-const cache = require('../middleware/cache')
 const http = require('http')
 const fs = require('fs')
 const crypto = require('crypto')
@@ -417,7 +416,7 @@ router.get('/Venacercate', async (req, res) => {
     }
 
 })
-router.post('/login',cache, urlencodedParser, async (req, res) => {
+router.post('/login', urlencodedParser, async (req, res) => {
     try {
         //Programacion.collection.drop()
         const user = await User.findByCredentials(req.body.email, req.body.password)
@@ -584,16 +583,13 @@ router.post('/logout', auth, async (req, res) => {
     try {
         req.user.tokens = []
         await req.user.save()
-        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-        res.header('Expires', '-1');
-        res.header('Pragma', 'no-cache');
         req.session.destroy()
         //res.send()
-        res.render('login.pug', { title: 'Radio Nuevo Tiempo' })
+       // res.render('login.pug', { title: 'Radio Nuevo Tiempo' })
         //res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
         //res.header('Expires', '-1');
         //res.header('Pragma', 'no-cache');
-        //res.redirect('/');
+        res.redirect('/');
     } catch (e) {
         res.status(500).send()
     }
