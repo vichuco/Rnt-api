@@ -8,6 +8,7 @@ const multer = require('multer')
 const bodyParser = require('body-parser')
 const xlsxj = require("xlsx-to-json");
 const auth = require('../middleware/auth')
+const cache = require('../middleware/cache')
 const http = require('http')
 const fs = require('fs')
 const crypto = require('crypto')
@@ -416,7 +417,7 @@ router.get('/Venacercate', async (req, res) => {
     }
 
 })
-router.post('/login', urlencodedParser, async (req, res) => {
+router.post('/login',cache, urlencodedParser, async (req, res) => {
     try {
         //Programacion.collection.drop()
         const user = await User.findByCredentials(req.body.email, req.body.password)
