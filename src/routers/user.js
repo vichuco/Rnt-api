@@ -583,13 +583,16 @@ router.post('/logout', auth, async (req, res) => {
     try {
         req.user.tokens = []
         await req.user.save()
+        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+        res.header('Expires', '-1');
+        res.header('Pragma', 'no-cache');
         req.session.destroy()
         //res.send()
-        //res.render('login.pug', { title: 'Radio Nuevo Tiempo' })
+        res.render('login.pug', { title: 'Radio Nuevo Tiempo' })
         //res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
         //res.header('Expires', '-1');
         //res.header('Pragma', 'no-cache');
-        res.redirect('/');
+        //res.redirect('/');
     } catch (e) {
         res.status(500).send()
     }
