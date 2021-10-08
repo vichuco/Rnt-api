@@ -422,7 +422,7 @@ router.post('/login', urlencodedParser, async (req, res) => {
         const user = await User.findByCredentials(req.body.email, req.body.password)
         req.session.userInfo = user
         const token = await user.generateAuthToken()
-        //res.cookie('authcookie', token, { maxAge: 900000, httpOnly: true })
+        res.cookie('authcookie', token, { maxAge: 0, httpOnly: true })
 
         gfs.files.find().toArray((err, files) => {
             // Check if files
